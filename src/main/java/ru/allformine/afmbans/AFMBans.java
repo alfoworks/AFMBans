@@ -1,4 +1,4 @@
-package ru.allformine.bans.afmbans;
+package ru.allformine.afmbans;
 
 import com.google.inject.Inject;
 import org.slf4j.Logger;
