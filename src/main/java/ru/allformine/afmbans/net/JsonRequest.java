@@ -1,6 +1,7 @@
 package ru.allformine.afmbans.net;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
@@ -12,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 
 public class JsonRequest {
     private String responseString;
-
-    public JsonRequest(URL url, JsonObject json) throws Exception {
+    private int responseCode = 200;
+    public JsonRequest(URL url, JsonElement json) throws Exception {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod("POST");
@@ -25,10 +26,12 @@ public class JsonRequest {
         OutputStream os = connection.getOutputStream();
         os.write(input, 0, input.length);
 
+        this.responseCode = connection.getResponseCode();
+
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
 
         StringBuilder response = new StringBuilder();
-        String responseLine = null;
+        String responseLine;
         while ((responseLine = br.readLine()) != null) {
             response.append(responseLine.trim());
         }
@@ -37,10 +40,14 @@ public class JsonRequest {
     }
 
     public JsonObject getResponseJson() {
-        return new Gson().fromJson(this.responseString.toString(), JsonObject.class);
+        return new Gson().fromJson(this.responseString, JsonObject.class);
     }
 
     public String getResponseString() {
         return this.responseString;
+    }
+
+    public int getResponseCode() {
+        return this.responseCode;
     }
 }
