@@ -49,10 +49,19 @@ public class BanAPI {
         return res.get("count").getAsInt();
     }
 
-    public int warn(String reason, CommandSource source) throws Exception {
+    public int warn(String reason, CommandSource cmdSource) throws Exception {
         JsonObject json = new JsonObject();
-        json.addProperty("target_UUID", this.uuid.toString());
-        json.addProperty();
+        JsonObject target = new JsonObject();
+        target.addProperty("nickname", this.nickname);
+        target.addProperty("UUID", this.uuid.toString());
+        JsonObject source = new JsonObject();
+        source.addProperty("nickname", cmdSource.getName());
+        if(cmdSource instanceof Player) {
+            Player commandSource = (Player) cmdSource;
+            source.addProperty("UUID", commandSource.getUniqueId().toString());
+        }
+        json.add("target", target);
+        json.add("source", source);
         json.addProperty("type", "warn");
         json.addProperty("reason", reason);
         JsonObject res = makeRequest("punish", json);
