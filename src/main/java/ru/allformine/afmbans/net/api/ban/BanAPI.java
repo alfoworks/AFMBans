@@ -55,7 +55,7 @@ public class BanAPI {
         target.addProperty("nickname", this.nickname);
         target.addProperty("UUID", this.uuid.toString());
         JsonObject jsonSource = new JsonObject();
-        jsonSource.addProperty("nickname", cmdSource.getName());
+        jsonSource.addProperty("nickname", commandSource.getName());
         if(commandSource instanceof Player) {
             Player playerSource = (Player) commandSource;
             jsonSource.addProperty("UUID", playerSource.getUniqueId().toString());
