@@ -5,6 +5,7 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.net.JsonRequest;
 
+import javax.annotation.Nullable;
 import java.net.InetAddress;
 import java.net.URL;
 import java.time.Duration;
@@ -49,28 +50,23 @@ public class BanAPI {
         return res.get("count").getAsInt();
     }
 
-    public JsonObject punish(String reason, CommandSource commandSource, Type type,
-                             Duration duration, InetAddress address) throws Exception {
+    public JsonObject punish(CommandSource commandSource, Type type, @Nullable String reason,
+                             @Nullable Duration duration, @Nullable InetAddress address) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname.toLowerCase());
         json.addProperty("type", type.name());
-        json.addProperty("reason", reason);
-        if(duration != null){
-            json.addProperty("duration", duration.getSeconds());
-        }
+        if(reason != null) json.addProperty("reason", reason);
+        if(duration != null) json.addProperty("duration", duration.getSeconds());
+        if(address) json.addProperty("ip_address", address.getHostAddress());
         return makeRequest("punish", json);
     }
 
-    public JsonObject amnesty(String reason, CommandSource commandSource, Type type) throws Exception {
+    public JsonObject amnesty(CommandSource commandSource, Type type) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname.toLowerCase());
         json.addProperty("type", "un" + type.name());
-        json.addProperty("reason", reason);
         return makeRequest("amnesty", json);
     }
-
-
-
 }
