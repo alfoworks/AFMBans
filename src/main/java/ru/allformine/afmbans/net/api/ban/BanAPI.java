@@ -5,14 +5,14 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.net.JsonRequest;
 
+import java.net.InetAddress;
 import java.net.URL;
-import java.util.UUID;
+import java.time.Duration;
 
 public class BanAPI {
-    private UUID uuid;
     private String nickname;
+
     public BanAPI(Player player){
-        this.uuid = player.getUniqueId();
         this.nickname = player.getName();
     }
 
@@ -35,7 +35,7 @@ public class BanAPI {
 
     public boolean check(Type type) throws Exception {
         JsonObject json = new JsonObject();
-        json.addProperty("UUID", this.uuid.toString());
+        json.addProperty("nickname", this.nickname);
         json.addProperty("type", type.name());
         JsonObject res = makeRequest("check", json);
         return res.get("punished").getAsBoolean();
@@ -49,25 +49,28 @@ public class BanAPI {
         return res.get("count").getAsInt();
     }
 
-    public int warn(String reason, CommandSource commandSource) throws Exception {
+    public JsonObject punish(String reason, CommandSource commandSource, Type type,
+                             Duration duration, InetAddress address) throws Exception {
         JsonObject json = new JsonObject();
-        JsonObject target = new JsonObject();
-        target.addProperty("nickname", this.nickname);
-        target.addProperty("UUID", this.uuid.toString());
-        JsonObject jsonSource = new JsonObject();
-        jsonSource.addProperty("nickname", commandSource.getName());
-        if(commandSource instanceof Player) {
-            Player playerSource = (Player) commandSource;
-            jsonSource.addProperty("UUID", playerSource.getUniqueId().toString());
-        }else{
-            jsonSource.addProperty("UUID", "");
-        }
-        json.add("target", target);
-        json.add("source", jsonSource);
-        json.addProperty("type", "warn");
+        json.addProperty("source", commandSource.getName());
+        json.addProperty("target", this.nickname.toLowerCase());
+        json.addProperty("type", type.name());
         json.addProperty("reason", reason);
-        JsonObject res = makeRequest("punish", json);
-        return res.get("count").getAsInt();
+        if(duration != null){
+            json.addProperty("duration", duration.getSeconds());
+        }
+        return makeRequest("punish", json);
     }
+
+    public JsonObject amnesty(String reason, CommandSource commandSource, Type type) throws Exception {
+        JsonObject json = new JsonObject();
+        json.addProperty("source", commandSource.getName());
+        json.addProperty("target", this.nickname.toLowerCase());
+        json.addProperty("type", "un" + type.name());
+        json.addProperty("reason", reason);
+        return makeRequest("amnesty", json);
+    }
+
+
 
 }
