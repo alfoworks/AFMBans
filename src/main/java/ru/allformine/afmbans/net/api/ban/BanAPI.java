@@ -17,7 +17,6 @@ public class BanAPI {
         this.nickname = player.getName();
     }
 
-
     private static JsonObject makeRequest(String method, JsonObject json) throws Exception {
         JsonRequest req = new JsonRequest(
                 new URL(
@@ -34,10 +33,13 @@ public class BanAPI {
         Warn
     }
 
-    public boolean check(Type type) throws Exception {
+    public boolean check(Type type, @Nullable InetAddress address) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", type.name());
+        if(type == Type.Ban && address != null){
+            json.addProperty("ip", address.getHostAddress());
+        }
         JsonObject res = makeRequest("check", json);
         return res.get("punished").getAsBoolean();
     }
@@ -81,12 +83,13 @@ public class BanAPI {
         return makeRequest("ip", json);
     }
 
-    public static JsonObject getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws Exception {
+    public static BasicResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws Exception {
         // Один из параметров обязателен
         JsonObject json = new JsonObject();
         if(nickname != null) json.addProperty("nickname", nickname);
         if(address != null) json.addProperty("ip", address.getHostAddress());
         json.addProperty("type", "get");
-        return makeRequest("ip", json);
+        JsonObject resp = makeRequest("ip", json);
+        return new BasicResponse(resp);
     }
 }

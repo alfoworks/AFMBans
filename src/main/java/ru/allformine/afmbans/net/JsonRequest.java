@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 
 public class JsonRequest {
     private String responseString;
-    private int responseCode = 200;
+    private int responseCode;
     public JsonRequest(URL url, JsonElement json) throws Exception {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
