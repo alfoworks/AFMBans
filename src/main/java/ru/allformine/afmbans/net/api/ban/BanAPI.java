@@ -44,7 +44,7 @@ public class BanAPI {
 
     public int getWarns() throws Exception {
         JsonObject json = new JsonObject();
-        json.addProperty("UUID", this.uuid.toString());
+        json.addProperty("nickname", this.nickname);
         json.addProperty("type", "Warn");
         JsonObject res = makeRequest("check", json);
         return res.get("count").getAsInt();
@@ -58,7 +58,10 @@ public class BanAPI {
         json.addProperty("type", type.name());
         if(reason != null) json.addProperty("reason", reason);
         if(duration != null) json.addProperty("duration", duration.getSeconds());
-        if(address) json.addProperty("ip_address", address.getHostAddress());
+        if(address != null){
+            json.addProperty("ip", address.getHostAddress());
+            json.addProperty("use_ip", true);
+        }
         return makeRequest("punish", json);
     }
 
@@ -68,5 +71,22 @@ public class BanAPI {
         json.addProperty("target", this.nickname.toLowerCase());
         json.addProperty("type", "un" + type.name());
         return makeRequest("amnesty", json);
+    }
+
+    public static JsonObject addIpToHistory(String nickname, InetAddress address) throws Exception {
+        JsonObject json = new JsonObject();
+        json.addProperty("nickname", nickname);
+        json.addProperty("ip", address.getHostAddress());
+        json.addProperty("type", "add");
+        return makeRequest("ip", json);
+    }
+
+    public static JsonObject getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws Exception {
+        // Один из параметров обязателен
+        JsonObject json = new JsonObject();
+        if(nickname != null) json.addProperty("nickname", nickname);
+        if(address != null) json.addProperty("ip", address.getHostAddress());
+        json.addProperty("type", "get");
+        return makeRequest("ip", json);
     }
 }
