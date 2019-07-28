@@ -19,6 +19,7 @@ public class CommandBan extends Command {
         try {
             banApi.punish(src, BanAPI.Type.Ban, reason, null, null);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CommandException(getReplyText("Произошла неизвестная ошибка.", TextType.ERROR));
         }
 

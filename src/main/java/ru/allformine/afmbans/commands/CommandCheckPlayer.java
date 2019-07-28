@@ -18,6 +18,7 @@ public class CommandCheckPlayer extends Command {
         try {
             banned = banApi.check(BanAPI.Type.Ban, player.getConnection().getAddress().getAddress());
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CommandException(getReplyText("Произошла неизвестная ошибка.", TextType.ERROR));
         }
 
