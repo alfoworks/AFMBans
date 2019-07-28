@@ -7,6 +7,9 @@ version = '0.1-BETA'
 
 dependencies {
     compile 'org.spongepowered:spongeapi:7.0.0'
-} 
+}
+
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
 
 sponge.plugin.id = 'afmbans'
