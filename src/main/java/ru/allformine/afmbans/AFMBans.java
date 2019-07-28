@@ -3,7 +3,6 @@ package ru.allformine.afmbans;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.args.CommandElement;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.event.Listener;
@@ -13,16 +12,7 @@ import org.spongepowered.api.text.Text;
 import ru.allformine.afmbans.commands.CommandBan;
 import ru.allformine.afmbans.commands.CommandCheckPlayer;
 
-@Plugin(
-        id = "afmbans",
-        name = "AFMBans",
-        description = "Custom ban plugin.",
-        url = "allformine.ru",
-        authors = {
-                "Iterator",
-                "HeroBrine1st_Erq"
-        }
-)
+@Plugin(id = "afmbans", name = "AFMBans")
 public class AFMBans {
     @Inject
     public static Logger logger;
