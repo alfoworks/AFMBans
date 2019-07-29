@@ -6,11 +6,15 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.game.state.GameLoadCompleteEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 import ru.allformine.afmbans.commands.CommandBan;
 import ru.allformine.afmbans.commands.CommandCheckPlayer;
+import ru.allformine.afmbans.listeners.BanEventListener;
 
 @Plugin(id = "afmbans", name = "AFMBans")
 public class AFMBans {
@@ -28,7 +32,7 @@ public class AFMBans {
                 .description(Text.of("Забанить игрока"))
                 .permission(PluginPermissions.COMMAND_BAN)
                 .arguments(
-                        GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))),
                         GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))))
                 .executor(new CommandBan())
                 .build();
@@ -37,7 +41,7 @@ public class AFMBans {
                 .description(Text.of("Проверить все IP игрока и его наказания."))
                 .permission(PluginPermissions.COMMAND_CHECK_PLAYER)
                 .arguments(
-                        GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))))
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
                 .executor(new CommandCheckPlayer())
                 .build();
 
@@ -45,4 +49,8 @@ public class AFMBans {
         Sponge.getCommandManager().register(this, checkPlayerSpec, "checkplayer", "afmcheckplayer", "cp", "afmcp");
     }
 
+    @Listener
+    public void preInit(GamePreInitializationEvent event) {
+        Sponge.getEventManager().registerListeners(this, new BanEventListener());
+    }
 }

@@ -13,32 +13,25 @@ import java.time.Duration;
 public class BanAPI {
     private String nickname;
 
-    public BanAPI(Player player){
-        this.nickname = player.getName();
+    public BanAPI(String nickname){
+        this.nickname = nickname;
     }
 
     private static JsonObject makeRequest(String method, JsonObject json) throws Exception {
         JsonRequest req = new JsonRequest(
                 new URL(
-                        String.format("https://allformine.ru/ban_api?method=%s", method)
+                        String.format("https://allformine.ru/ban_api/?method=%s", method)
                 ),
                 json
         );
         return req.getResponseJson();
     }
 
-    public enum Type{
-        Ban,
-        Mute,
-        Warn,
-        Kick
-    }
-
-    public boolean check(Type type, @Nullable InetAddress address) throws Exception {
+    public boolean check(PunishType type, @Nullable InetAddress address) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", type.name());
-        if(type == Type.Ban && address != null){
+        if(type == PunishType.Ban && address != null){
             json.addProperty("ip", address.getHostAddress());
         }
         JsonObject res = makeRequest("check", json);
@@ -53,7 +46,7 @@ public class BanAPI {
         return res.get("count").getAsInt();
     }
 
-    public JsonObject punish(CommandSource commandSource, Type type, @Nullable String reason,
+    public JsonObject punish(CommandSource commandSource, PunishType type, @Nullable String reason,
                              @Nullable Duration duration, @Nullable InetAddress address) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
@@ -68,7 +61,7 @@ public class BanAPI {
         return makeRequest("punish", json);
     }
 
-    public JsonObject amnesty(CommandSource commandSource, Type type) throws Exception {
+    public JsonObject amnesty(CommandSource commandSource, PunishType type) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname.toLowerCase());
