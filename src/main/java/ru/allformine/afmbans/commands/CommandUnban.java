@@ -1,29 +1,33 @@
 package ru.allformine.afmbans.commands;
 
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
+import ru.allformine.afmbans.ActionType;
+import ru.allformine.afmbans.PluginMessages;
+import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
 
-public class CommandCheckPlayer extends Command {
+public class CommandUnban extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         String nick = args.<String>getOne("player").get();
         BanAPI banApi = new BanAPI(nick);
 
-        boolean banned;
+        boolean ok;
 
         try {
-            banned = banApi.check(PunishType.BAN, Sponge.getServer().getPlayer(nick).isPresent() ? Sponge.getServer().getPlayer(nick).get().getConnection().getAddress().getAddress() : null);
+            ok = banApi.amnesty(src, PunishType.BAN).get("ok").getAsBoolean();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CommandException(getReplyText("Произошла неизвестная ошибка.", TextType.ERROR));
+            throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }
 
-        src.sendMessage(getReplyText("Игрок забанен: " + (banned ? "да" : "нет"), TextType.OK));
+        if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
+
+        src.sendMessage(getReplyText(PluginMessages.UNBAN_SUCCESSFUL, TextType.OK));
+        PluginUtils.broadcastPunishMessage(src, nick, ActionType.UNBAN);
 
         return CommandResult.success();
     }

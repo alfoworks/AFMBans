@@ -6,6 +6,7 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
+import ru.allformine.afmbans.ActionType;
 import ru.allformine.afmbans.PluginMessages;
 import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
@@ -23,7 +24,7 @@ public class CommandBan extends Command {
         boolean ok;
 
         try {
-            ok = banApi.punish(src, PunishType.Ban, reason, null, null).get("ok").getAsBoolean();
+            ok = banApi.punish(src, PunishType.BAN, reason, null, null).get("ok").getAsBoolean();
         } catch (Exception e) {
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }
@@ -37,7 +38,7 @@ public class CommandBan extends Command {
         }
 
         src.sendMessage(getReplyText(PluginMessages.BAN_SUCCESSFUL, TextType.OK));
-        PluginUtils.broadcastPunishMessage(src, nick, PunishType.Ban);
+        PluginUtils.broadcastPunishMessage(src, nick, ActionType.BAN);
 
         return CommandResult.success();
     }

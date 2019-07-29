@@ -2,7 +2,6 @@ package ru.allformine.afmbans.net.api.ban;
 
 import com.google.gson.JsonObject;
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.net.JsonRequest;
 
 import javax.annotation.Nullable;
@@ -31,7 +30,7 @@ public class BanAPI {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", type.name());
-        if(type == PunishType.Ban && address != null){
+        if(type == PunishType.BAN && address != null){
             json.addProperty("ip", address.getHostAddress());
         }
         JsonObject res = makeRequest("check", json);
@@ -41,7 +40,7 @@ public class BanAPI {
     public int getWarns() throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
-        json.addProperty("type", "Warn");
+        json.addProperty("type", "WARN");
         JsonObject res = makeRequest("check", json);
         return res.get("count").getAsInt();
     }

@@ -14,7 +14,7 @@ public class BanEventListener {
         boolean banned;
 
         try {
-            banned = banApi.check(PunishType.Ban, event.getConnection().getAddress().getAddress());
+            banned = banApi.check(PunishType.BAN, event.getConnection().getAddress().getAddress());
         } catch (Exception e) {
             e.printStackTrace();
             return;

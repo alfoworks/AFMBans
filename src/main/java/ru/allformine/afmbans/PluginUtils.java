@@ -4,24 +4,33 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import ru.allformine.afmbans.net.api.ban.PunishType;
 
 public class PluginUtils {
-    public static void broadcastPunishMessage(CommandSource src, String target, PunishType type) {
+    public static void broadcastPunishMessage(CommandSource src, String target, ActionType type) {
         String action = "";
 
         switch(type) {
-            case Ban:
+            case BAN:
                 action = "забанил";
                 break;
-            case Kick:
+            case KICK:
                 action = "кикнул";
                 break;
-            case Mute:
+            case MUTE:
                 action = "выдал мут";
                 break;
-            case Warn:
+            case WARN:
                 action = "выдал предупреждение";
+                break;
+
+            case UNBAN:
+                action = "разбанил";
+                break;
+            case UNMUTE:
+                action = "снял мут";
+                break;
+            case UNWARN:
+                action = "снял предупреждение";
                 break;
         }
 
