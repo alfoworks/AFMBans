@@ -30,7 +30,8 @@ public class BanAPI {
     public enum Type{
         Ban,
         Mute,
-        Warn
+        Warn,
+        Kick
     }
 
     public boolean check(Type type, @Nullable InetAddress address) throws Exception {
