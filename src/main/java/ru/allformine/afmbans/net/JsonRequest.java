@@ -18,8 +18,11 @@ public class JsonRequest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json; utf-8");
         connection.setDoOutput(true);
+
+        connection.setRequestProperty("Content-Type", "application/json; utf-8");
+
+        connection.connect();
 
         byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);
 

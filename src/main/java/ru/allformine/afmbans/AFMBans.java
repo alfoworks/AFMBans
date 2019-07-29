@@ -6,7 +6,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameLoadCompleteEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 import ru.allformine.afmbans.commands.CommandBan;
@@ -23,7 +23,7 @@ public class AFMBans {
     }
 
     @Listener
-    public void onServerStart(GameStartedServerEvent event) {
+    public void onLoadComplete(GameLoadCompleteEvent event) {
         CommandSpec banSpec = CommandSpec.builder()
                 .description(Text.of("Забанить игрока"))
                 .permission(PluginPermissions.COMMAND_BAN)
@@ -44,4 +44,5 @@ public class AFMBans {
         Sponge.getCommandManager().register(this, banSpec, "ban", "afmban");
         Sponge.getCommandManager().register(this, checkPlayerSpec, "checkplayer", "afmcheckplayer", "cp", "afmcp");
     }
+
 }
