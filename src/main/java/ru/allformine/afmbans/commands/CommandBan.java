@@ -17,7 +17,9 @@ public class CommandBan extends Command {
         String reason = args.getOne("reason").isPresent() ? args.<String>getOne("reason").get() : PluginStatics.DEFAULT_REASON;
 
         try {
-            banApi.punish(src, BanAPI.Type.Ban, reason, null, null);
+            String resp = banApi.punish(src, BanAPI.Type.Ban, reason, null, null).toString();
+
+            System.out.println(resp);
         } catch (Exception e) {
             e.printStackTrace();
             throw new CommandException(getReplyText("Произошла неизвестная ошибка.", TextType.ERROR));
