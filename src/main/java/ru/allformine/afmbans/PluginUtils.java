@@ -35,7 +35,7 @@ public class PluginUtils {
         }
 
         Text text = Text.builder()
-                .append(Text.of(src.getName())).color(PluginStatics.BROADCAST_COLOR)
+                .append(Text.of(src.getName() + " ")).color(PluginStatics.BROADCAST_COLOR)
                 .append(Text.of(action + " "))
                 .append(Text.builder().append(Text.of(" игрока ")).color(TextColors.RESET).build())
                 .append(Text.of(target)).color(PluginStatics.BROADCAST_COLOR)
