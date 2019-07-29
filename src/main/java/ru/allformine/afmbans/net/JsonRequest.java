@@ -15,6 +15,8 @@ public class JsonRequest {
     private String responseString;
     private int responseCode;
     public JsonRequest(URL url, JsonElement json) throws Exception {
+        byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);
+
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod("POST");
@@ -23,8 +25,6 @@ public class JsonRequest {
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
 
         connection.connect();
-
-        byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);
 
         OutputStream os = connection.getOutputStream();
         os.write(input, 0, input.length);

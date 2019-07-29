@@ -20,7 +20,7 @@ public class BanAPI {
     private static JsonObject makeRequest(String method, JsonObject json) throws Exception {
         JsonRequest req = new JsonRequest(
                 new URL(
-                        String.format("http://allformine.ru/ban_api?method=%s", method)
+                        String.format("https://allformine.ru/ban_api?method=%s", method)
                 ),
                 json
         );
