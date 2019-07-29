@@ -28,7 +28,7 @@ public class JsonRequest {
 
         this.responseCode = connection.getResponseCode();
 
-        if (this.responseCode >= 200 && this.responseCode < 300) {
+        if (this.responseCode >= 200 && this.responseCode < 400) {
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine;
             StringBuilder response = new StringBuilder();
