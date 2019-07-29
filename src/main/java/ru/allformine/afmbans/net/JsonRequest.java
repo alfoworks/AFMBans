@@ -28,15 +28,24 @@ public class JsonRequest {
 
         this.responseCode = connection.getResponseCode();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
-
-        StringBuilder response = new StringBuilder();
-        String responseLine;
-        while ((responseLine = br.readLine()) != null) {
-            response.append(responseLine.trim());
+        if (this.responseCode >= 200 && this.responseCode < 300) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            this.responseString = response.toString();
+        } else if (connection.getErrorStream() != null) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+            StringBuilder result = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.append("\n").append(line);
+            }
+            this.responseString = result.toString();
         }
-
-        this.responseString = response.toString();
     }
 
     public JsonObject getResponseJson() {
