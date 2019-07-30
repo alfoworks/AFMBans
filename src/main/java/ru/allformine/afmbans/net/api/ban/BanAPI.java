@@ -81,7 +81,7 @@ public class BanAPI {
         JsonObject json = new JsonObject();
         JsonObject filter = new JsonObject();
         if(nickname != null) filter.addProperty("nickname", nickname);
-        if(address != null) filter.addProperty("ip", address.getHostAddress());
+        if(address != null) filter.addProperty("ip_address", address.getHostAddress());
         json.add("filter", filter);
         json.addProperty("type", "get");
         JsonObject resp = makeRequest("ip", json);
