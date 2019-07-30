@@ -64,8 +64,12 @@ public class PluginUtils {
     public static Text getPlayerTwinksMessage(String nickname, ArrayList<String> nicks) {
         return Text.builder()
                 .append(Text.builder(nickname).color(PluginStatics.MESSAGE_COLOR).build())
-                .append(Text.of(" вошёл в игру. Его остальные аккаунты:"))
-                .append(Text.builder().append(Text.of(String.join("\n- ", nicks))).color(PluginStatics.MESSAGE_COLOR).build())
+                .append(Text.of(" вошёл в игру. Его остальные аккаунты: "))
+                .append(Text.builder().append(Text.of(String.join("\n - ", nicks))).color(PluginStatics.MESSAGE_COLOR).build())
                 .build();
+    }
+
+    public static void debug(String string) {
+        if (PluginStatics.DEBUG_MODE) AFMBans.logger.trace(string);
     }
 }

@@ -2,6 +2,9 @@ package ru.allformine.afmbans.net.api.ban;
 
 import com.google.gson.JsonObject;
 import org.spongepowered.api.command.CommandSource;
+import ru.allformine.afmbans.AFMBans;
+import ru.allformine.afmbans.PluginStatics;
+import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.JsonRequest;
 
 import javax.annotation.Nullable;
@@ -17,6 +20,8 @@ public class BanAPI {
     }
 
     private static JsonObject makeRequest(String method, JsonObject json) throws Exception {
+        PluginUtils.debug("Sending JSON: " + json.toString());
+
         JsonRequest req = new JsonRequest(
                 new URL(
                         String.format("https://allformine.ru/ban_api/?method=%s", method)

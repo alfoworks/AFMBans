@@ -21,6 +21,7 @@ public class CommandUnban extends Command {
         try {
             ok = banApi.amnesty(src, PunishType.BAN).get("ok").getAsBoolean();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }
 

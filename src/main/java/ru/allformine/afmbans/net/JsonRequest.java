@@ -3,6 +3,10 @@ package ru.allformine.afmbans.net;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import ru.allformine.afmbans.AFMBans;
+import ru.allformine.afmbans.PluginStatics;
+import ru.allformine.afmbans.PluginUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -52,7 +56,18 @@ public class JsonRequest {
     }
 
     public JsonObject getResponseJson() {
-        return new Gson().fromJson(this.responseString, JsonObject.class);
+        PluginUtils.debug("Receiving JSON: " + this.responseString);
+
+        JsonObject json;
+
+        try {
+            json = new Gson().fromJson(this.responseString, JsonObject.class);
+        } catch (JsonSyntaxException e) {
+            AFMBans.logger.error("Error parsing JSON\n" + this.responseString);
+            return null;
+        }
+
+        return json;
     }
 
     public String getResponseString() {

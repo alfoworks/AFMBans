@@ -12,6 +12,7 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 import ru.allformine.afmbans.commands.CommandBan;
 import ru.allformine.afmbans.commands.CommandCheckPlayer;
+import ru.allformine.afmbans.commands.CommandDebugMode;
 import ru.allformine.afmbans.commands.CommandUnban;
 import ru.allformine.afmbans.listeners.BanEventListener;
 import ru.allformine.afmbans.listeners.PlayerHistoryListener;
@@ -53,9 +54,16 @@ public class AFMBans {
                 .executor(new CommandCheckPlayer())
                 .build();
 
+        CommandSpec debugModeSpec = CommandSpec.builder()
+                .description(Text.of("Переключить режим отладки."))
+                .permission(PluginPermissions.COMMAND_DEBUG_MODE)
+                .executor(new CommandDebugMode())
+                .build();
+
         Sponge.getCommandManager().register(this, banSpec, "ban", "afmban");
         Sponge.getCommandManager().register(this, unbanSpec, "unban", "afmunban");
         Sponge.getCommandManager().register(this, checkPlayerSpec, "checkplayer", "afmcheckplayer", "cp", "afmcp");
+        Sponge.getCommandManager().register(this, debugModeSpec, "afmbansdebug", "debugmode", "dm", "afmdm");
     }
 
     @Listener

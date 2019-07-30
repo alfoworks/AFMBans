@@ -8,4 +8,6 @@ public class PluginStatics {
 
     public static TextColor MESSAGE_COLOR = TextColors.GREEN;
     public static TextColor BAN_MESSAGE_COLOR = TextColors.LIGHT_PURPLE;
+
+    public static boolean DEBUG_MODE = false;
 }
