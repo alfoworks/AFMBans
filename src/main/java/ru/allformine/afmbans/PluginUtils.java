@@ -70,6 +70,6 @@ public class PluginUtils {
     }
 
     public static void debug(String string) {
-        if (PluginStatics.DEBUG_MODE) AFMBans.logger.trace(string);
+        if (PluginStatics.DEBUG_MODE) AFMBans.logger.warn(string);
     }
 }
