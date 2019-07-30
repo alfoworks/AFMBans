@@ -41,7 +41,7 @@ public class PluginUtils {
                 .append(Text.of(action + " "))
                 .append(Text.builder().append(Text.of("игрока ")).color(TextColors.RESET).build())
                 .append(Text.of(target)).color(PluginStatics.MESSAGE_COLOR)
-                .append(type != ActionType.UNBAN && type != ActionType.UNMUTE && type != ActionType.UNWARN ? Text.builder().append(Text.of(" навсегда ")).color(TextColors.RESET).build() : null)
+                .append(type != ActionType.UNBAN && type != ActionType.UNMUTE && type != ActionType.UNWARN ? Text.builder().append(Text.of(" навсегда ")).color(TextColors.RESET).build() : Text.of())
                 .build();
 
         Sponge.getServer().getBroadcastChannel().send(text);
