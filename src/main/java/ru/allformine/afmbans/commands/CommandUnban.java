@@ -24,7 +24,7 @@ public class CommandUnban extends Command {
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }
 
-        if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
+        if (!ok) throw new CommandException(getReplyText(PluginMessages.PLAYER_NOT_BANNED, TextType.ERROR));
 
         src.sendMessage(getReplyText(PluginMessages.UNBAN_SUCCESSFUL, TextType.OK));
         PluginUtils.broadcastPunishMessage(src, nick, ActionType.UNBAN);

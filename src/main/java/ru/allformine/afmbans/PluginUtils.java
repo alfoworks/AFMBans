@@ -5,6 +5,8 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import java.util.ArrayList;
+
 public class PluginUtils {
     public static void broadcastPunishMessage(CommandSource src, String target, ActionType type) {
         String action = "";
@@ -35,10 +37,10 @@ public class PluginUtils {
         }
 
         Text text = Text.builder()
-                .append(Text.of(src.getName() + " ")).color(PluginStatics.BROADCAST_COLOR)
+                .append(Text.of(src.getName() + " ")).color(PluginStatics.MESSAGE_COLOR)
                 .append(Text.of(action + " "))
                 .append(Text.builder().append(Text.of("игрока ")).color(TextColors.RESET).build())
-                .append(Text.of(target)).color(PluginStatics.BROADCAST_COLOR)
+                .append(Text.of(target)).color(PluginStatics.MESSAGE_COLOR)
                 .append(type != ActionType.UNBAN && type != ActionType.UNMUTE && type != ActionType.UNWARN ? Text.builder().append(Text.of(" навсегда ")).color(TextColors.RESET).build() : null)
                 .build();
 
@@ -51,11 +53,19 @@ public class PluginUtils {
                 .append(Text.builder().append(Text.of(" перманентный ")).color(PluginStatics.BAN_MESSAGE_COLOR).build())
                 .append(Text.of("бан :3"))
                 .append(Text.of("\n\n"))
-                .append(Text.builder().append(Text.of("От: ")).color(PluginStatics.BAN_MESSAGE_COLOR).build())
-                .append(Text.of(source))
+                .append(Text.of("От: "))
+                .append(Text.builder().append(Text.of(source)).color(PluginStatics.BAN_MESSAGE_COLOR).build())
                 .append(Text.of("\n"))
-                .append(Text.builder().append(Text.of("По причине: ")).color(PluginStatics.BAN_MESSAGE_COLOR).build())
-                .append(Text.of(reason)).color(PluginStatics.BAN_MESSAGE_COLOR)
+                .append(Text.of("По причине: "))
+                .append(Text.builder().append(Text.of(reason)).color(PluginStatics.BAN_MESSAGE_COLOR).build())
+                .build();
+    }
+
+    public static Text getPlayerTwinksMessage(String nickname, ArrayList<String> nicks) {
+        return Text.builder()
+                .append(Text.builder(nickname).color(PluginStatics.MESSAGE_COLOR).build())
+                .append(Text.of(" вошёл в игру. Его остальные аккаунты:"))
+                .append(Text.builder().append(Text.of(String.join("\n- ", nicks))).color(PluginStatics.MESSAGE_COLOR).build())
                 .build();
     }
 }

@@ -6,4 +6,5 @@ public class PluginMessages {
 
     public static String BAN_SUCCESSFUL = "Игрок был успешно забанен.";
     public static String UNBAN_SUCCESSFUL = "Игрок был успешно разбанен.";
+    public static String PLAYER_NOT_BANNED = "Игрок не забанен!";
 }

@@ -14,6 +14,7 @@ import ru.allformine.afmbans.commands.CommandBan;
 import ru.allformine.afmbans.commands.CommandCheckPlayer;
 import ru.allformine.afmbans.commands.CommandUnban;
 import ru.allformine.afmbans.listeners.BanEventListener;
+import ru.allformine.afmbans.listeners.PlayerHistoryListener;
 
 @Plugin(id = "afmbans", name = "AFMBans")
 public class AFMBans {
@@ -60,5 +61,6 @@ public class AFMBans {
     @Listener
     public void preInit(GamePreInitializationEvent event) {
         Sponge.getEventManager().registerListeners(this, new BanEventListener());
+        Sponge.getEventManager().registerListeners(this, new PlayerHistoryListener());
     }
 }
