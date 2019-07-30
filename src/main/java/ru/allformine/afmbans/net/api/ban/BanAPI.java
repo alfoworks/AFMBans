@@ -79,8 +79,10 @@ public class BanAPI {
     public static BasicResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws Exception {
         // Один из параметров обязателен
         JsonObject json = new JsonObject();
-        if(nickname != null) json.addProperty("nickname", nickname);
-        if(address != null) json.addProperty("ip", address.getHostAddress());
+        JsonObject filter = new JsonObject();
+        if(nickname != null) filter.addProperty("nickname", nickname);
+        if(address != null) filter.addProperty("ip", address.getHostAddress());
+        json.add("filter", filter);
         json.addProperty("type", "get");
         JsonObject resp = makeRequest("ip", json);
         return new BasicResponse(resp);
