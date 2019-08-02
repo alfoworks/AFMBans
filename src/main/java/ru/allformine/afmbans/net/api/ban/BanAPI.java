@@ -34,7 +34,7 @@ public class BanAPI {
         Kick
     }
 
-    public boolean check(Type type, @Nullable InetAddress address) throws Exception {
+    public CheckResponse check(Type type, @Nullable InetAddress address) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", type.name());
@@ -42,9 +42,10 @@ public class BanAPI {
             json.addProperty("ip", address.getHostAddress());
         }
         JsonObject res = makeRequest("check", json);
-        return res.get("punished").getAsBoolean();
+        return new CheckResponse(res);
     }
 
+    @Deprecated
     public int getWarns() throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
