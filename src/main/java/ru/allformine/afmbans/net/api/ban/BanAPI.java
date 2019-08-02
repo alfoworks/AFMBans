@@ -27,24 +27,18 @@ public class BanAPI {
         return req.getResponseJson();
     }
 
-    public enum Type{
-        Ban,
-        Mute,
-        Warn,
-        Kick
-    }
-
-    public boolean check(Type type, @Nullable InetAddress address) throws Exception {
+    public CheckResponse check(PunishType type, @Nullable InetAddress address) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", type.name());
-        if(type == Type.Ban && address != null){
+        if(type == PunishType.BAN && address != null){
             json.addProperty("ip", address.getHostAddress());
         }
         JsonObject res = makeRequest("check", json);
-        return res.get("punished").getAsBoolean();
+        return new CheckResponse(res);
     }
 
+    @Deprecated
     public int getWarns() throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
@@ -53,7 +47,7 @@ public class BanAPI {
         return res.get("count").getAsInt();
     }
 
-    public JsonObject punish(CommandSource commandSource, Type type, @Nullable String reason,
+    public JsonObject punish(CommandSource commandSource, PunishType type, @Nullable String reason,
                              @Nullable Duration duration, @Nullable InetAddress address) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
@@ -68,7 +62,7 @@ public class BanAPI {
         return makeRequest("punish", json);
     }
 
-    public JsonObject amnesty(CommandSource commandSource, Type type) throws Exception {
+    public JsonObject amnesty(CommandSource commandSource, PunishType type) throws Exception {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname.toLowerCase());
@@ -87,8 +81,10 @@ public class BanAPI {
     public static BasicResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws Exception {
         // Один из параметров обязателен
         JsonObject json = new JsonObject();
-        if(nickname != null) json.addProperty("nickname", nickname);
-        if(address != null) json.addProperty("ip", address.getHostAddress());
+        JsonObject filter = new JsonObject();
+        if(nickname != null) filter.addProperty("nickname", nickname);
+        if(address != null) filter.addProperty("ip_address", address.getHostAddress());
+        json.add("filter", filter);
         json.addProperty("type", "get");
         JsonObject resp = makeRequest("ip", json);
         return new BasicResponse(resp);
