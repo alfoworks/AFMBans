@@ -1,29 +1,44 @@
 package ru.allformine.afmbans.commands;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
+import ru.allformine.afmbans.ActionType;
+import ru.allformine.afmbans.PluginMessages;
 import ru.allformine.afmbans.PluginStatics;
+import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
+import ru.allformine.afmbans.net.api.ban.PunishType;
 
 public class CommandBan extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        Player player = args.<Player>getOne("player").get();
-        BanAPI banApi = new BanAPI(player);
+        String nick = args.<String>getOne("player").get();
+        BanAPI banApi = new BanAPI(nick);
 
-        String reason = args.getOne("reason").isPresent() ? args.<String>getOne("reason").get() : PluginStatics.DEFAULT_REASON;
+        String reason = (String) args.getOne("reason").orElse(PluginStatics.DEFAULT_REASON);
+
+        boolean ok;
 
         try {
-            banApi.punish(src, BanAPI.Type.Ban, reason, null, null);
+            ok = banApi.punish(src, PunishType.BAN, reason, null, null).get("ok").getAsBoolean();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CommandException(getReplyText("Произошла неизвестная ошибка.", TextType.ERROR));
+            throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }
 
-        src.sendMessage(getReplyText("Игрок был успешно забанен.", TextType.OK));
+        if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
+
+        Player player = Sponge.getServer().getPlayer(nick).orElse(null);
+
+        if (player != null) {
+            player.kick(PluginUtils.getBanMessageForPlayer(src.getName(), reason));
+        }
+
+        src.sendMessage(getReplyText(PluginMessages.BAN_SUCCESSFUL, TextType.OK));
+        PluginUtils.broadcastPunishMessage(src, nick, ActionType.BAN);
 
         return CommandResult.success();
     }

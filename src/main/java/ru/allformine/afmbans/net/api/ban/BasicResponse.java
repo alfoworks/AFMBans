@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BasicResponse {
-    List<JsonObject> objects;
+    public List<JsonObject> objects;
     private boolean hasError = false;
     private BasicError error;
     public BasicResponse(JsonObject object){
@@ -22,7 +22,7 @@ public class BasicResponse {
         }
     }
 
-    public boolean isHasError(){
+    public boolean hasError(){
         return hasError;
     }
 
