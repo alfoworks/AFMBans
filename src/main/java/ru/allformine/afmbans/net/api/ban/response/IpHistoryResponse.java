@@ -3,7 +3,7 @@ package ru.allformine.afmbans.net.api.ban.response;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import ru.allformine.afmbans.net.api.ban.ApiError.BasicError;
+import ru.allformine.afmbans.net.api.ban.error.BasicError;
 import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 
 import java.net.UnknownHostException;

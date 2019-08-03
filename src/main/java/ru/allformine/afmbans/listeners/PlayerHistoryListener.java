@@ -36,7 +36,7 @@ public class PlayerHistoryListener {
         }
 
         if (!response.ok) {
-            AFMBans.logger.error("API error checking player IPs: " + response.error.getDescription());
+            AFMBans.logger.error("API error checking player IPs: " + response.error.getBody().toString());
             return;
         }
 

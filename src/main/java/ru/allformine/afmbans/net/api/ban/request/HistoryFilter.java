@@ -7,7 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HistoryFilter {
-    private static String[] typesarray = new String[]{"warn", "mute", "ban", "unwarn" , "unmute", "unban", "kick", "unwarnall"};
+    private static String[] typesarray = new String[]{"warn", "mute", "ban", "unwarn" , "unmute", "unban", "kick",
+                                                      "unwarnall"};
     private static List<String> types = Arrays.asList(typesarray);
     private String target;
     private String source;

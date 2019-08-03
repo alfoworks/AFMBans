@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import ru.allformine.afmbans.net.api.ban.ApiError.BasicError;
+import ru.allformine.afmbans.net.api.ban.error.BasicError;
 import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 
 import java.lang.reflect.Type;
