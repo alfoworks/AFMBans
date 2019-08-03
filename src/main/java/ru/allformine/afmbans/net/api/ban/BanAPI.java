@@ -58,7 +58,7 @@ public class BanAPI {
                              @Nullable Duration duration, @Nullable InetAddress address) throws IOException {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
-        json.addProperty("target", this.nickname.toLowerCase());
+        json.addProperty("target", this.nickname);
         json.addProperty("type", type.name());
         if(reason != null) json.addProperty("reason", reason);
         if(duration != null) json.addProperty("duration", duration.getSeconds());
