@@ -58,7 +58,7 @@ public class HistoryFilter {
             json.addProperty("duration", this.duration);
         }
         if(this.use_ip != null){
-            json.addProperty("", this.use_ip);
+            json.addProperty("use_ip", this.use_ip);
         }
         return json;
     }
