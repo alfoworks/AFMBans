@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.net.JsonRequest;
+import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
+import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -81,7 +83,7 @@ public class BanAPI {
         return makeRequest("ip", json);
     }
 
-    public static BasicResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws IOException {
+    public static IpHistoryResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws IOException {
         // Один из параметров обязателен
         JsonObject json = new JsonObject();
         JsonObject filter = new JsonObject();
@@ -90,6 +92,6 @@ public class BanAPI {
         json.add("filter", filter);
         json.addProperty("type", "get");
         JsonObject resp = makeRequest("ip", json);
-        return new BasicResponse(resp);
+        return new IpHistoryResponse(resp);
     }
 }

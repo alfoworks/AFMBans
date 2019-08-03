@@ -1,10 +1,11 @@
-package ru.allformine.afmbans.net.api.ban;
+package ru.allformine.afmbans.net.api.ban.response;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import ru.allformine.afmbans.net.api.ban.ApiError.BasicError;
+import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -22,8 +23,8 @@ public class CheckResponse {
     public int count;
     public Date start;
     public Date end;
-
-    CheckResponse(JsonObject response) throws ParseException {
+    public BasicError error;
+    public CheckResponse(JsonObject response) throws ParseException {
         this.ok = response.get("ok").getAsBoolean();
         if(this.ok){
             this.punished = response.get("punished").getAsBoolean();
@@ -33,17 +34,19 @@ public class CheckResponse {
                     Type listType = new TypeToken<List<String>>() {}.getType();
                     List<String> reasons = new Gson().fromJson(jsonReason, listType);
                     this.reason = new ArrayList<>();
-                    for(String reason: reasons){
-                        this.reason.add(new Punish(reason));
-                    }
+                    reasons.forEach(reason -> this.reason.add(new Punish(reason)));
                 }else{
                     this.reason = new ArrayList<>();
                     this.reason.add(new Punish(jsonReason.getAsString()));
                 }
             }
             this.count = response.has("count")?response.get("count").getAsInt():0;
-            this.start = dateFormat.parse(response.get("start").getAsString());
-            this.end = dateFormat.parse(response.get("end").getAsString());
+            if(response.has("start") && response.has("end")) {
+                this.start = dateFormat.parse(response.get("start").getAsString());
+                this.end = dateFormat.parse(response.get("end").getAsString());
+            }
+        }else{
+            this.error = new BasicError(response);
         }
     }
 }

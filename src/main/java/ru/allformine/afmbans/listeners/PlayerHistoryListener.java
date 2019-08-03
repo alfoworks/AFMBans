@@ -8,10 +8,8 @@ import ru.allformine.afmbans.AFMBans;
 import ru.allformine.afmbans.PluginPermissions;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
-import ru.allformine.afmbans.net.api.ban.BasicResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerHistoryListener {
     @Listener
