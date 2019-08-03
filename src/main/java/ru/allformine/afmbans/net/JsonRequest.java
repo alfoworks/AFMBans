@@ -9,6 +9,7 @@ import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -18,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 public class JsonRequest {
     private String responseString;
     private int responseCode;
-    public JsonRequest(URL url, JsonElement json) throws Exception {
+    public JsonRequest(URL url, JsonElement json) throws IOException {
         byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

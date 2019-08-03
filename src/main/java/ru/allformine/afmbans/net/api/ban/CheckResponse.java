@@ -7,29 +7,43 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CheckResponse {
+    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
     public boolean ok;
     public boolean punished;
-    public List<String> reason;
+    public List<Punish> reason;
     public int count;
-    CheckResponse(JsonObject response){
+    public Date start;
+    public Date end;
+
+    CheckResponse(JsonObject response) throws ParseException {
         this.ok = response.get("ok").getAsBoolean();
         if(this.ok){
             this.punished = response.get("punished").getAsBoolean();
             if(response.has("reason")){
-                JsonElement reason = response.get("reason");
-                if(reason.isJsonArray()){
+                JsonElement jsonReason = response.get("reason");
+                if(jsonReason.isJsonArray()){
                     Type listType = new TypeToken<List<String>>() {}.getType();
-                    this.reason = new Gson().fromJson(reason, listType);
+                    List<String> reasons = new Gson().fromJson(jsonReason, listType);
+                    this.reason = new ArrayList<>();
+                    for(String reason: reasons){
+                        this.reason.add(new Punish(reason));
+                    }
                 }else{
                     this.reason = new ArrayList<>();
-                    this.reason.add(reason.getAsString());
+                    this.reason.add(new Punish(jsonReason.getAsString()));
                 }
             }
             this.count = response.has("count")?response.get("count").getAsInt():0;
+            this.start = dateFormat.parse(response.get("start").getAsString());
+            this.end = dateFormat.parse(response.get("end").getAsString());
         }
     }
 }

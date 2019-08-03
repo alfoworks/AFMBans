@@ -6,8 +6,10 @@ import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.net.JsonRequest;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
+import java.text.ParseException;
 import java.time.Duration;
 
 public class BanAPI {
@@ -17,7 +19,7 @@ public class BanAPI {
         this.nickname = player.getName();
     }
 
-    private static JsonObject makeRequest(String method, JsonObject json) throws Exception {
+    private static JsonObject makeRequest(String method, JsonObject json) throws IOException {
         JsonRequest req = new JsonRequest(
                 new URL(
                         String.format("http://127.0.0.1/ban_api?method=%s", method)
@@ -27,7 +29,7 @@ public class BanAPI {
         return req.getResponseJson();
     }
 
-    public CheckResponse check(PunishType type, @Nullable InetAddress address) throws Exception {
+    public CheckResponse check(PunishType type, @Nullable InetAddress address) throws IOException, ParseException {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", type.name());
@@ -39,7 +41,7 @@ public class BanAPI {
     }
 
     @Deprecated
-    public int getWarns() throws Exception {
+    public int getWarns() throws IOException {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", "Warn");
@@ -48,7 +50,7 @@ public class BanAPI {
     }
 
     public JsonObject punish(CommandSource commandSource, PunishType type, @Nullable String reason,
-                             @Nullable Duration duration, @Nullable InetAddress address) throws Exception {
+                             @Nullable Duration duration, @Nullable InetAddress address) throws IOException {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname.toLowerCase());
@@ -62,7 +64,7 @@ public class BanAPI {
         return makeRequest("punish", json);
     }
 
-    public JsonObject amnesty(CommandSource commandSource, PunishType type) throws Exception {
+    public JsonObject amnesty(CommandSource commandSource, PunishType type) throws IOException {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname.toLowerCase());
@@ -70,7 +72,7 @@ public class BanAPI {
         return makeRequest("amnesty", json);
     }
 
-    public static JsonObject addIpToHistory(String nickname, InetAddress address) throws Exception {
+    public static JsonObject addIpToHistory(String nickname, InetAddress address) throws IOException {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", nickname);
         json.addProperty("ip", address.getHostAddress());
@@ -78,7 +80,7 @@ public class BanAPI {
         return makeRequest("ip", json);
     }
 
-    public static BasicResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws Exception {
+    public static BasicResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws IOException {
         // Один из параметров обязателен
         JsonObject json = new JsonObject();
         JsonObject filter = new JsonObject();
