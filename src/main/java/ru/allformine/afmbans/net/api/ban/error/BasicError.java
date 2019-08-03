@@ -1,4 +1,4 @@
-package ru.allformine.afmbans.net.api.ban.ApiError;
+package ru.allformine.afmbans.net.api.ban.error;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
