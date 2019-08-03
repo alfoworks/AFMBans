@@ -18,8 +18,8 @@ import java.time.Duration;
 public class BanAPI {
     private String nickname;
 
-    public BanAPI(Player player){
-        this.nickname = player.getName();
+    public BanAPI(String nickname){
+        this.nickname = nickname;
     }
 
     private static JsonObject makeRequest(String method, JsonObject json) throws IOException {
