@@ -2,10 +2,11 @@ package ru.allformine.afmbans.net.api.ban;
 
 import com.google.gson.JsonObject;
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.JsonRequest;
+import ru.allformine.afmbans.net.api.ban.request.HistoryFilter;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
+import ru.allformine.afmbans.net.api.ban.response.HistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 
 import javax.annotation.Nullable;
@@ -95,5 +96,13 @@ public class BanAPI {
         json.addProperty("type", "get");
         JsonObject resp = makeRequest("ip", json);
         return new IpHistoryResponse(resp);
+    }
+
+    public static HistoryResponse getHistory(HistoryFilter filter) throws ParseException, IOException {
+        JsonObject json = new JsonObject();
+        json.add("filter", filter.getJson());
+        json.addProperty("type", "get");
+        JsonObject resp = makeRequest("history", json);
+        return new HistoryResponse(resp);
     }
 }

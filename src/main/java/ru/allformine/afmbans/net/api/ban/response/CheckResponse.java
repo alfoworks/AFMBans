@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.error.BasicError;
 import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 
@@ -16,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 
 public class CheckResponse {
-    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
     public boolean ok;
     public boolean punished;
     public List<Punish> reason;
@@ -42,8 +42,8 @@ public class CheckResponse {
             }
             this.count = response.has("count")?response.get("count").getAsInt():0;
             if(response.has("start") && response.has("end")) {
-                this.start = dateFormat.parse(response.get("start").getAsString());
-                this.end = dateFormat.parse(response.get("end").getAsString());
+                this.start = PluginUtils.dateFormat.parse(response.get("start").getAsString());
+                this.end = PluginUtils.dateFormat.parse(response.get("end").getAsString());
             }
         }else{
             this.error = new BasicError(response);

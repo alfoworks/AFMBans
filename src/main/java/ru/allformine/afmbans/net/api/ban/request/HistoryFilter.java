@@ -41,7 +41,7 @@ public class HistoryFilter {
         this.use_ip = use;
     }
 
-    public JsonObject getFilter(){
+    public JsonObject getJson(){
         JsonObject json = new JsonObject();
         if(this.target != null){
             json.addProperty("target", this.target);
