@@ -5,13 +5,14 @@ import org.spongepowered.api.event.network.ClientConnectionEvent;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
+import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
 
 public class BanEventListener {
     @Listener
     public void onPlayerLogin(ClientConnectionEvent.Login event) {
         BanAPI banApi = new BanAPI(event.getTargetUser().getName());
 
-        boolean banned;
+        CheckResponse banned;
 
         try {
             banned = banApi.check(PunishType.BAN, event.getConnection().getAddress().getAddress());
@@ -20,11 +21,11 @@ public class BanEventListener {
             return;
         }
 
-        if (!banned) {
+        if (!banned.punished) {
             return;
         }
 
-        event.setMessage(PluginUtils.getBanMessageForPlayer("Iterator", "Плохое поведение"));
+        event.setMessage(PluginUtils.getBanMessageForPlayer(banned.reason.get(0).source, banned.reason.get(0).reason));
         event.setCancelled(true);
     }
 }
