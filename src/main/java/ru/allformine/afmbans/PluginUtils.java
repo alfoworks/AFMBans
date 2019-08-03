@@ -4,9 +4,9 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
+import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
+import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class PluginUtils {
@@ -61,6 +61,12 @@ public class PluginUtils {
                 .append(Text.of("По причине: "))
                 .append(Text.builder().append(Text.of(reason)).color(PluginStatics.BAN_MESSAGE_COLOR).build())
                 .build();
+    }
+
+    public static String getOneLineBanMessageForPlayer(CheckResponse response) {
+        Punish punish = response.reason.get(0);
+
+        return String.format("Забанил: %s, по причине: %s", punish.source, punish.reason);
     }
 
     public static Text getPlayerTwinksMessage(String nickname, ArrayList<String> nicks) {
