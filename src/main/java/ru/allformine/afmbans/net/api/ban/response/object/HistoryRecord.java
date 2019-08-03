@@ -1,7 +1,7 @@
 package ru.allformine.afmbans.net.api.ban.response.object;
 
 import com.google.gson.JsonObject;
-import ru.allformine.afmbans.PluginUtils;
+import ru.allformine.afmbans.PluginStatics;
 
 
 import java.math.BigInteger;
@@ -22,7 +22,7 @@ public class HistoryRecord {
         this.source = record.get("source").getAsString();
         this.reason = record.get("reason").getAsString();
         this.type = record.get("type").getAsInt();
-        this.start_date = PluginUtils.dateFormat.parse(record.get("start_date").getAsString());
+        this.start_date = PluginStatics.dateFormat.parse(record.get("start_date").getAsString());
         this.duration = record.get("duration").getAsBigInteger();
         this.use_ip = record.get("use_ip").getAsBoolean();
     }

@@ -4,14 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import ru.allformine.afmbans.PluginUtils;
+import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.net.api.ban.error.BasicError;
 import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 
 import java.lang.reflect.Type;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,8 +40,8 @@ public class CheckResponse {
             }
             this.count = response.has("count")?response.get("count").getAsInt():0;
             if(response.has("start") && response.has("end")) {
-                this.start = PluginUtils.dateFormat.parse(response.get("start").getAsString());
-                this.end = PluginUtils.dateFormat.parse(response.get("end").getAsString());
+                this.start = PluginStatics.dateFormat.parse(response.get("start").getAsString());
+                this.end = PluginStatics.dateFormat.parse(response.get("end").getAsString());
             }
         }else{
             this.error = new BasicError(response);

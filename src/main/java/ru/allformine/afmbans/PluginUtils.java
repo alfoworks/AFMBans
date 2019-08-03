@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class PluginUtils {
-    public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
     public static void broadcastPunishMessage(CommandSource src, String target, ActionType type) {
         String action = "";
 
