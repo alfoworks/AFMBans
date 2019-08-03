@@ -40,14 +40,14 @@ public class BanAPI {
         return new CheckResponse(res);
     }
 
-    @Deprecated
-    public int getWarns() throws IOException {
-        JsonObject json = new JsonObject();
-        json.addProperty("nickname", this.nickname);
-        json.addProperty("type", "Warn");
-        JsonObject res = makeRequest("check", json);
-        return res.get("count").getAsInt();
-    }
+//    @Deprecated
+//    public int getWarns() throws IOException {
+//        JsonObject json = new JsonObject();
+//        json.addProperty("nickname", this.nickname);
+//        json.addProperty("type", "Warn");
+//        JsonObject res = makeRequest("check", json);
+//        return res.get("count").getAsInt();
+//    }
 
     public JsonObject punish(CommandSource commandSource, PunishType type, @Nullable String reason,
                              @Nullable Duration duration, @Nullable InetAddress address) throws IOException {
@@ -68,6 +68,7 @@ public class BanAPI {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname.toLowerCase());
+
         json.addProperty("type", "un" + type.name());
         return makeRequest("amnesty", json);
     }
