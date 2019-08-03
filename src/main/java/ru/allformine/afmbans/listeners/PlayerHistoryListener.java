@@ -40,8 +40,6 @@ public class PlayerHistoryListener {
             return;
         }
 
-        PluginUtils.debug("Test: " + response.items.size());
-
         for (IpHistoryRecord object : response.items) {
             String nick = object.nickname;
             if (!nick.equals(event.getTargetEntity().getName())) {

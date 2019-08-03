@@ -17,9 +17,9 @@ public class IpHistoryResponse {
     public IpHistoryResponse(JsonObject object) throws UnknownHostException {
         this.ok = object.get("ok").getAsBoolean();
         if(this.ok) {
-            JsonArray responseItems = object.getAsJsonArray("items");
+            JsonArray items = object.getAsJsonArray("items");
             this.items = new ArrayList<>();
-            for (JsonElement element : responseItems) {
+            for (JsonElement element : items) {
                 IpHistoryRecord record = new IpHistoryRecord((JsonObject) element);
                 this.items.add(record);
             }
