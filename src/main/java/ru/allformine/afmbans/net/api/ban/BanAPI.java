@@ -3,6 +3,7 @@ package ru.allformine.afmbans.net.api.ban;
 import com.google.gson.JsonObject;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
+import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.JsonRequest;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
@@ -22,6 +23,7 @@ public class BanAPI {
     }
 
     private static JsonObject makeRequest(String method, JsonObject json) throws IOException {
+        PluginUtils.debug("Sending JSON: \"" + json.toString() + "\" using method \"" + method + "\"");
         JsonRequest req = new JsonRequest(
                 new URL(
                         String.format("http://127.0.0.1/ban_api?method=%s", method)
@@ -42,14 +44,14 @@ public class BanAPI {
         return new CheckResponse(res);
     }
 
-//    @Deprecated
-//    public int getWarns() throws IOException {
-//        JsonObject json = new JsonObject();
-//        json.addProperty("nickname", this.nickname);
-//        json.addProperty("type", "Warn");
-//        JsonObject res = makeRequest("check", json);
-//        return res.get("count").getAsInt();
-//    }
+    @Deprecated
+    public int getWarns() throws IOException {
+        JsonObject json = new JsonObject();
+        json.addProperty("nickname", this.nickname);
+        json.addProperty("type", "Warn");
+        JsonObject res = makeRequest("check", json);
+        return res.get("count").getAsInt();
+    }
 
     public JsonObject punish(CommandSource commandSource, PunishType type, @Nullable String reason,
                              @Nullable Duration duration, @Nullable InetAddress address) throws IOException {
