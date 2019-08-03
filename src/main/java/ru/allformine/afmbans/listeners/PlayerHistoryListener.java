@@ -28,7 +28,7 @@ public class PlayerHistoryListener {
         IpHistoryResponse response;
 
         try {
-            response = BanAPI.getIpHistory(event.getTargetEntity().getName(), event.getTargetEntity().getConnection().getAddress().getAddress());
+            response = BanAPI.getIpHistory(null, event.getTargetEntity().getConnection().getAddress().getAddress());
         } catch (Exception e) {
             AFMBans.logger.error("Error checking player IPs");
             e.printStackTrace();
@@ -39,8 +39,6 @@ public class PlayerHistoryListener {
             AFMBans.logger.error("API error checking player IPs: " + response.error.getBody().toString());
             return;
         }
-
-        PluginUtils.debug(String.valueOf(response.items.size()));
 
         for (IpHistoryRecord object : response.items) {
             String nick = object.nickname;
