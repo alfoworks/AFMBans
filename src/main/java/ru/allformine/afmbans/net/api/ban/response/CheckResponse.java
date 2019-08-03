@@ -22,6 +22,7 @@ public class CheckResponse {
     public Date start;
     public Date end;
     public BasicError error;
+    public String target;
     public CheckResponse(JsonObject response) throws ParseException {
         this.ok = response.get("ok").getAsBoolean();
         if(this.ok){
@@ -43,6 +44,7 @@ public class CheckResponse {
                 this.start = PluginStatics.dateFormat.parse(response.get("start").getAsString());
                 this.end = PluginStatics.dateFormat.parse(response.get("end").getAsString());
             }
+            this.target = response.get("target").getAsString();
         }else{
             this.error = new BasicError(response);
         }
