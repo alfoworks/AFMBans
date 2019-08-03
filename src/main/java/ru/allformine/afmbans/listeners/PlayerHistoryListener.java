@@ -51,6 +51,6 @@ public class PlayerHistoryListener {
             return;
         }
 
-        MessageChannel.permission(PluginPermissions.PLAYER_TWINK_NOTIFY).send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), nicks));
+        MessageChannel.permission(PluginPermissions.PLAYER_JOIN_NOTIFY).send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), nicks));
     }
 }
