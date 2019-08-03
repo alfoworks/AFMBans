@@ -27,7 +27,7 @@ public class BanAPI {
         PluginUtils.debug("Sending JSON: \"" + json.toString() + "\" using method \"" + method + "\"");
         JsonRequest req = new JsonRequest(
                 new URL(
-                        String.format("http://allormine.ru/ban_api/?method=%s", method)
+                        String.format("http://allformine.ru/ban_api/?method=%s", method)
                 ),
                 json
         );
