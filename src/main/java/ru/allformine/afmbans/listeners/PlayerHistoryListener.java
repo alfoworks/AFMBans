@@ -8,6 +8,8 @@ import ru.allformine.afmbans.AFMBans;
 import ru.allformine.afmbans.PluginPermissions;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
+import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
+import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 
 import java.util.ArrayList;
 
@@ -23,7 +25,7 @@ public class PlayerHistoryListener {
 
         ArrayList<String> nicks = new ArrayList<>();
 
-        BasicResponse response;
+        IpHistoryResponse response;
 
         try {
             response = BanAPI.getIpHistory(event.getTargetEntity().getName(), event.getTargetEntity().getConnection().getAddress().getAddress());
@@ -33,14 +35,13 @@ public class PlayerHistoryListener {
             return;
         }
 
-        if (response.hasError()) {
-            AFMBans.logger.error("API error checking player IPs: " + response.getError().getDescription());
+        if (!response.ok) {
+            AFMBans.logger.error("API error checking player IPs: " + response.error.getDescription());
             return;
         }
 
-        for (JsonObject object : response.objects) {
-            String nick = object.get("nickname").getAsString();
-
+        for (IpHistoryRecord object : response.items) {
+            String nick = object.nickname;
             if (!nick.equals(event.getTargetEntity().getName())) {
                 nicks.add(nick);
             }
