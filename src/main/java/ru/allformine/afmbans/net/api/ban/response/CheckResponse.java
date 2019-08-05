@@ -40,10 +40,8 @@ public class CheckResponse {
                 }
             }
             this.count = response.has("count")?response.get("count").getAsInt():0;
-            if(response.has("start") && response.has("end")) {
-                this.start = PluginStatics.dateFormat.parse(response.get("start").getAsString());
-                this.end = PluginStatics.dateFormat.parse(response.get("end").getAsString());
-            }
+            if(response.has("start")) this.start = PluginStatics.dateFormat.parse(response.get("start").getAsString());
+            if(response.has("end")) this.end = PluginStatics.dateFormat.parse(response.get("end").getAsString());
             this.target = response.get("target").getAsString();
         }else{
             this.error = new BasicError(response);
