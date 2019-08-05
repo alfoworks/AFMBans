@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class HistoryFilter {
     private static String[] typesarray = new String[]{"warn", "mute", "ban", "unwarn" , "unmute", "unban", "kick",
                                                       "unwarnall"};
@@ -13,7 +14,7 @@ public class HistoryFilter {
     private String target;
     private String source;
     private String reason;
-    private Integer type;
+    private Integer type; // Еще раз, пидор ты блядь невнимательный: внизу сука проверка на null, а примитивы такого не позволяют
     private Long duration;
     private Boolean use_ip;
 
