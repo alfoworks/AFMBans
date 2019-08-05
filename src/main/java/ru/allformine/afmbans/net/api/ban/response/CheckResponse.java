@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
 import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.net.api.ban.error.BasicError;
 import ru.allformine.afmbans.net.api.ban.response.object.Punish;
@@ -31,6 +32,7 @@ public class CheckResponse {
             if(response.has("reason")){
                 JsonElement jsonReason = response.get("reason");
                 if(jsonReason.isJsonArray()){
+
                     Type listType = new TypeToken<List<String>>() {}.getType();
                     List<String> reasons = new Gson().fromJson(jsonReason, listType);
                     this.reason = new ArrayList<>();

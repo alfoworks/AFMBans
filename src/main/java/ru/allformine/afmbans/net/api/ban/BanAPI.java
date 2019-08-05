@@ -98,6 +98,21 @@ public class BanAPI {
         return new IpHistoryResponse(resp);
     }
 
+    public static CheckResponse checkIpBan(InetAddress address) throws IOException, ParseException {
+        JsonObject json = new JsonObject();
+        json.addProperty("ip", address.getHostAddress());
+        json.addProperty("type", "check");
+        return new CheckResponse(makeRequest("ip", json));
+
+    }
+
+    public static JsonObject UnbanIp(InetAddress address) throws IOException {
+        JsonObject json = new JsonObject();
+        json.addProperty("ip", address.getHostAddress());
+        json.addProperty("type", "unban");
+        return makeRequest("ip", json);
+    }
+
     public static HistoryResponse getHistory(HistoryFilter filter) throws ParseException, IOException {
         JsonObject json = new JsonObject();
         json.add("filter", filter.getJson());
