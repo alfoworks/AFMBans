@@ -28,7 +28,7 @@ public class PlayerHistoryListener {
         IpHistoryResponse response;
 
         try {
-            response = BanAPI.getIpHistory(event.getTargetEntity().getName(), event.getTargetEntity().getConnection().getAddress().getAddress());
+            response = BanAPI.getIpHistory(null, event.getTargetEntity().getConnection().getAddress().getAddress());
         } catch (Exception e) {
             AFMBans.logger.error("Error checking player IPs");
             e.printStackTrace();
@@ -51,6 +51,6 @@ public class PlayerHistoryListener {
             return;
         }
 
-        MessageChannel.permission(PluginPermissions.PLAYER_TWINK_NOTIFY).send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), nicks));
+        MessageChannel.permission(PluginPermissions.PLAYER_JOIN_NOTIFY).send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), nicks));
     }
 }

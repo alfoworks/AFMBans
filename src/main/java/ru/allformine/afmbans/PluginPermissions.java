@@ -6,5 +6,5 @@ public class PluginPermissions {
     public static String COMMAND_CHECK_PLAYER = "afmbans.command.checkplayer";
     public static String COMMAND_DEBUG_MODE = "afmbans.command.debugmode";
 
-    public static String PLAYER_TWINK_NOTIFY = "afmbans.twinknotify";
+    public static String PLAYER_JOIN_NOTIFY = "afmbans.joinnotify";
 }

@@ -2,6 +2,9 @@ package ru.allformine.afmbans.listeners;
 
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.channel.MessageChannel;
+import ru.allformine.afmbans.PluginPermissions;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
@@ -27,5 +30,7 @@ public class BanEventListener {
 
         event.setMessage(PluginUtils.getBanMessageForPlayer(banned.reason.get(0).source, banned.reason.get(0).reason));
         event.setCancelled(true);
+
+        MessageChannel.permission(PluginPermissions.PLAYER_JOIN_NOTIFY).send(Text.of(event.getTargetUser().getName() + " попытался войти, но он забанен."));
     }
 }
