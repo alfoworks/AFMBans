@@ -43,24 +43,12 @@ public class HistoryFilter {
 
     public JsonObject getJson(){
         JsonObject json = new JsonObject();
-        if(this.target != null){
-            json.addProperty("target", this.target);
-        }
-        if(this.source != null){
-            json.addProperty("source", this.source);
-        }
-        if(this.reason != null){
-            json.addProperty("reason", this.reason);
-        }
-        if(this.type != null){
-            json.addProperty("type", this.type);
-        }
-        if(this.duration != null){
-            json.addProperty("duration", this.duration);
-        }
-        if(this.use_ip != null){
-            json.addProperty("use_ip", this.use_ip);
-        }
+        if(this.target != null) json.addProperty("target", this.target);
+        if(this.source != null) json.addProperty("source", this.source);
+        if(this.reason != null) json.addProperty("reason", this.reason);
+        if(this.type != null) json.addProperty("type", this.type);
+        if(this.duration != null) json.addProperty("duration", this.duration);
+        if(this.use_ip != null) json.addProperty("use_ip", this.use_ip);
         return json;
     }
 
