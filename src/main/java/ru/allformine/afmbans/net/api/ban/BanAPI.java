@@ -106,7 +106,7 @@ public class BanAPI {
 
     }
 
-    public static JsonObject UnbanIp(InetAddress address) throws IOException {
+    public static JsonObject unbanIp(InetAddress address) throws IOException {
         JsonObject json = new JsonObject();
         json.addProperty("ip", address.getHostAddress());
         json.addProperty("type", "unban");
