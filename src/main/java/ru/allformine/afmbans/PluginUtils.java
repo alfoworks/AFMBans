@@ -2,12 +2,17 @@ package ru.allformine.afmbans;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
 import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
 
 public class PluginUtils {
     public static Text getPunishMessage(CommandSource src, String target, ActionType type) {
@@ -77,5 +82,40 @@ public class PluginUtils {
 
     public static void debug(String string) {
         if (PluginStatics.DEBUG_MODE) AFMBans.logger.warn(string);
+    }
+
+    public static String getTrueNickCase(String nickname) {
+        Optional<UserStorageService> userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
+
+        if (userStorage.isPresent()&& userStorage.get().get(nickname).isPresent()) {
+            return userStorage.get().get(nickname).get().getName();
+        }
+
+        return nickname;
+    }
+
+    public static Duration getDuration(String unit, int time) {
+        if (Arrays.stream(PluginStatics.TEMP_PUNISH_TIME_UNITS).noneMatch(unit::equalsIgnoreCase)) {
+            throw new IllegalArgumentException("Unknown unit");
+        }
+
+        Duration dura;
+
+        switch(unit) {
+            case "s":
+                dura = Duration.ofSeconds(time);
+                break;
+            case "m":
+                dura = Duration.ofMinutes(time);
+                break;
+            case "h":
+                dura = Duration.ofHours(time);
+                break;
+            case "d":
+                dura = Duration.ofDays(time);
+                break;
+            case "w":
+                dura = Duration.of
+        }
     }
 }

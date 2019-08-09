@@ -34,6 +34,8 @@ public class AFMBans {
                 .permission(PluginPermissions.COMMAND_BAN)
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))),
+                        GenericArguments.optional(GenericArguments.string(Text.of("time"))),
+                        GenericArguments.optional(GenericArguments.string(Text.of("unit"))),
                         GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))))
                 .executor(new CommandBan())
                 .build();

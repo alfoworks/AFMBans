@@ -14,4 +14,6 @@ public class PluginStatics {
 
     public static boolean DEBUG_MODE = false;
     public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+
+    public static String[] TEMP_PUNISH_TIME_UNITS = new String[]{"s", "m", "d", "w", "mo", "y"};
 }
