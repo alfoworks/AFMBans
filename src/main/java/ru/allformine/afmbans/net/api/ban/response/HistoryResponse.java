@@ -14,16 +14,19 @@ public class HistoryResponse {
     public List<HistoryRecord> items;
     public boolean ok;
     public BasicError error;
+
     public HistoryResponse(JsonObject object) throws ParseException {
         this.ok = object.get("ok").getAsBoolean();
-        if(this.ok) {
+
+        if (this.ok) {
             JsonArray items = object.getAsJsonArray("items");
             this.items = new ArrayList<>();
+
             for (JsonElement element : items) {
                 HistoryRecord record = new HistoryRecord((JsonObject) element);
                 this.items.add(record);
             }
-        }else{
+        } else {
             this.error = new BasicError(object);
         }
     }

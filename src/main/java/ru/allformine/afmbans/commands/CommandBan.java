@@ -5,7 +5,6 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.ActionType;
 import ru.allformine.afmbans.PluginMessages;
 import ru.allformine.afmbans.PluginStatics;
@@ -31,14 +30,10 @@ public class CommandBan extends Command {
 
         if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
 
-        Player player = Sponge.getServer().getPlayer(nick).orElse(null);
-
-        if (player != null) {
-            player.kick(PluginUtils.getBanMessageForPlayer(src.getName(), reason));
-        }
+        Sponge.getServer().getPlayer(nick).ifPresent(player -> player.kick(PluginUtils.getBanMessageForPlayer(src.getName(), reason)));
 
         src.sendMessage(getReplyText(PluginMessages.BAN_SUCCESSFUL, TextType.OK));
-        PluginUtils.broadcastPunishMessage(src, nick, ActionType.BAN);
+        Sponge.getServer().getBroadcastChannel().send(PluginUtils.getPunishMessage(src, nick, ActionType.BAN));
 
         return CommandResult.success();
     }

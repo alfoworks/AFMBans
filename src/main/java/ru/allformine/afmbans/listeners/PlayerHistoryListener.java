@@ -1,6 +1,5 @@
 package ru.allformine.afmbans.listeners;
 
-import com.google.gson.JsonObject;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.text.channel.MessageChannel;

@@ -10,7 +10,7 @@ import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 import java.util.ArrayList;
 
 public class PluginUtils {
-    public static void broadcastPunishMessage(CommandSource src, String target, ActionType type) {
+    public static Text getPunishMessage(CommandSource src, String target, ActionType type) {
         String action = "";
 
         switch(type) {
@@ -38,15 +38,13 @@ public class PluginUtils {
                 break;
         }
 
-        Text text = Text.builder()
+        return Text.builder()
                 .append(Text.of(src.getName() + " ")).color(PluginStatics.MESSAGE_COLOR)
                 .append(Text.of(action + " "))
                 .append(Text.builder().append(Text.of("игрока ")).color(TextColors.RESET).build())
                 .append(Text.of(target)).color(PluginStatics.MESSAGE_COLOR)
                 .append(type != ActionType.UNBAN && type != ActionType.UNMUTE && type != ActionType.UNWARN ? Text.builder().append(Text.of(" навсегда ")).color(TextColors.RESET).build() : Text.of())
                 .build();
-
-        Sponge.getServer().getBroadcastChannel().send(text);
     }
 
     public static Text getBanMessageForPlayer(String source, String reason) {

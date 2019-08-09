@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ru.allformine.afmbans.AFMBans;
-import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
 
 import java.io.BufferedReader;
@@ -19,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 public class JsonRequest {
     private String responseString;
     private int responseCode;
+
     public JsonRequest(URL url, JsonElement json) throws IOException {
         byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);
 

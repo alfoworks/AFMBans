@@ -9,7 +9,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
 
-public class Command implements CommandExecutor  {
+public class Command implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         return null;
     }

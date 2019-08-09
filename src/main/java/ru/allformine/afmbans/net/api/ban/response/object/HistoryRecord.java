@@ -3,7 +3,6 @@ package ru.allformine.afmbans.net.api.ban.response.object;
 import com.google.gson.JsonObject;
 import ru.allformine.afmbans.PluginStatics;
 
-
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.Date;
