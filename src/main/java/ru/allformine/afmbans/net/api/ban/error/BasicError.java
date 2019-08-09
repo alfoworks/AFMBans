@@ -8,23 +8,23 @@ public class BasicError {
     private String description;
     private JsonObject body;
 
-    public BasicError(JsonObject object) {
-        if (!object.get("ok").getAsBoolean()) {
+    public BasicError(JsonObject object){
+        if(!object.get("ok").getAsBoolean()){
             this.errorCode = object.get("error_code").getAsInt();
             this.description = object.get("error").getAsString();
             this.body = object;
         }
     }
 
-    public int getErrorCode() {
+    public int getErrorCode(){
         return this.errorCode;
     }
 
-    public String getDescription() {
+    public String getDescription(){
         return this.description;
     }
 
-    public JsonElement getBody() {
+    public JsonElement getBody(){
         return this.body;
     }
 
