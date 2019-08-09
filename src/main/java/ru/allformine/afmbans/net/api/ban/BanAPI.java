@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.text.ParseException;
-import java.time.Duration;
+import ru.allformine.afmbans.time.Duration;
 
 public class BanAPI {
     private String nickname;
