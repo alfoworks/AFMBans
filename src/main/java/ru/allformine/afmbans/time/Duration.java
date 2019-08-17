@@ -1,6 +1,6 @@
 package ru.allformine.afmbans.time;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Duration {
     private long seconds;
 
@@ -11,7 +11,6 @@ public class Duration {
     public long getSeconds(){
         return seconds;
     }
-
 
     public static Duration ofSeconds(long seconds){
         return new Duration(seconds);

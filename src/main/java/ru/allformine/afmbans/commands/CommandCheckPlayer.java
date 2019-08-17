@@ -10,6 +10,7 @@ import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
 
+@Deprecated
 public class CommandCheckPlayer extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
