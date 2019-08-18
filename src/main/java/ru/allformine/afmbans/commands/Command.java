@@ -9,6 +9,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
 
+@SuppressWarnings("WeakerAccess")
 public class Command implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         return null;
@@ -16,7 +17,7 @@ public class Command implements CommandExecutor {
 
     public Text getReplyText(String string, TextType type) {
         TextColor color = TextColors.BLACK;
-
+        string = "AFMBans > " + string;
         if (type == TextType.ERROR) {
             color = TextColors.RED;
         } else if (type == TextType.OK) {
@@ -25,7 +26,11 @@ public class Command implements CommandExecutor {
             color = TextColors.BLUE;
         }
 
-        return Text.builder().append(Text.of("AFMBans > " + string)).color(color).build();
+        return colorText(string, color);
+    }
+
+    public Text colorText(String string, TextColor color){
+        return Text.builder().append(Text.of(string)).color(color).build();
     }
 
     public enum TextType {

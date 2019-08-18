@@ -4,6 +4,7 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.text.Text;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
@@ -25,7 +26,7 @@ public class CommandDupeip extends Command {
                 throw new CommandException(getReplyText("Произошла неизвестная ошибка.", TextType.ERROR));
             }
             List<IpHistoryRecord> items = response.items;
-            StringBuilder builder = new StringBuilder(
+            Text.Builder builder = Text.builder();
             for(IpHistoryRecord record: items){
 
             }
