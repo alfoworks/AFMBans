@@ -2,6 +2,7 @@ package ru.allformine.afmbans.net.api.ban;
 
 import com.google.gson.JsonObject;
 import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.JsonRequest;
 import ru.allformine.afmbans.net.api.ban.error.ApiError;
@@ -9,19 +10,23 @@ import ru.allformine.afmbans.net.api.ban.request.HistoryFilter;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
 import ru.allformine.afmbans.net.api.ban.response.HistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
+import ru.allformine.afmbans.time.Duration;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.text.ParseException;
-import ru.allformine.afmbans.time.Duration;
 
 public class BanAPI {
     private String nickname;
 
     public BanAPI(String nickname) {
         this.nickname = nickname;
+    }
+
+    public BanAPI(Player player){
+        this.nickname = player.getName();
     }
 
     private static JsonObject makeRequest(String method, JsonObject json) throws IOException, ApiError {
