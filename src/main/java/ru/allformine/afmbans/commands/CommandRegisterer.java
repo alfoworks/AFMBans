@@ -29,10 +29,11 @@ public class CommandRegisterer {
 
         CommandSpec checkPlayerSpec = CommandSpec.builder()
                 .description(Text.of("Проверить все IP игрока и его наказания."))
-                .permission(PluginPermissions.COMMAND_CHECK_PLAYER)
+                .permission(PluginPermissions.COMMAND_DUPEIP)
                 .arguments(
-                        GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
-                .executor(new CommandCheckPlayer())
+                        GenericArguments.optional(GenericArguments.string(Text.of("player"))),
+                        GenericArguments.optional(GenericArguments.ip(Text.of("ip"))))
+                .executor(new CommandDupeip())
                 .build();
 
         CommandSpec debugModeSpec = CommandSpec.builder()
