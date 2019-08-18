@@ -5,15 +5,11 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.text.Text;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
-import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
-import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 
-import java.util.List;
 import java.util.Optional;
 
 @Deprecated
