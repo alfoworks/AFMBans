@@ -16,7 +16,7 @@ import java.util.Optional;
 public class CommandCheckPlayer extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        Optional<String> protoNick = args.<String>getOne("player");
+        Optional<String> protoNick = args.getOne("player");
         if(protoNick.isPresent()){
             String nick = protoNick.get();
             BanAPI banApi = new BanAPI(nick);

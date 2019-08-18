@@ -6,21 +6,31 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.text.Text;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
+import ru.allformine.afmbans.net.api.ban.error.ApiError;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Optional;
 
 public class CommandDupeip extends Command {
+
+    private IpHistoryRecord getIpFromHistory(String nickname) throws IOException, ApiError {
+        IpHistoryResponse response = BanAPI.getIpHistory(nickname, null);
+        return response.items.get(response.items.size() - 1);
+    }
+
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        Optional<String> protoNick= args.<String>getOne("player");
+        Optional<String> protoNick = args.<String>getOne("player");
         if(protoNick.isPresent()){
             String nick = protoNick.get();
             IpHistoryResponse response;
             try {
-                response = BanAPI.getIpHistory(nick, null);
+                InetAddress address = getIpFromHistory(nick).ip;
+                response = BanAPI.getIpHistory(null, address);
             } catch (Exception e) { // ApiError, IOE
                 e.printStackTrace();
                 throw new CommandException(getReplyText("Произошла неизвестная ошибка.", TextType.ERROR));
@@ -28,6 +38,7 @@ public class CommandDupeip extends Command {
             List<IpHistoryRecord> items = response.items;
             Text.Builder builder = Text.builder();
             for(IpHistoryRecord record: items){
+                String nickname = record.nickname;
 
             }
             src.sendMessage(getReplyText(builder.toString(), TextType.OK));
