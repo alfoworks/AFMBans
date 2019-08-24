@@ -11,7 +11,7 @@ import ru.allformine.afmbans.commands.CommandRegisterer;
 import ru.allformine.afmbans.listeners.BanEventListener;
 import ru.allformine.afmbans.listeners.PlayerHistoryListener;
 
-@Plugin(id = "afmbans", name = "AFMBans")
+@Plugin(id = "afmbans", name = "AFMBans", description = "Кастомные баны")
 public class AFMBans {
     @Inject
     public static Logger logger;
