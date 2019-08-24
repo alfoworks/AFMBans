@@ -2,14 +2,13 @@ package ru.allformine.afmbans;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
 import ru.allformine.afmbans.net.api.ban.response.object.Punish;
+import ru.allformine.afmbans.time.Duration;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
@@ -67,7 +66,7 @@ public class PluginUtils {
     }
 
     public static String getOneLineBanMessageForPlayer(CheckResponse response) {
-        Punish punish = response.reason.get(0);
+        Punish punish = response.reason;
 
         return String.format("Забанил: %s, по причине: %s", punish.source, punish.reason);
     }
@@ -100,7 +99,6 @@ public class PluginUtils {
         }
 
         Duration dura;
-
         switch(unit) {
             case "s":
                 dura = Duration.ofSeconds(time);
@@ -115,7 +113,17 @@ public class PluginUtils {
                 dura = Duration.ofDays(time);
                 break;
             case "w":
-                dura = Duration.of
+                dura = Duration.ofWeeks(time);
+                break;
+            case "M":
+                dura = Duration.ofMonths(time);
+                break;
+            case "Y":
+                dura = Duration.ofYears(time);
+                break;
+            default:
+                dura = Duration.ZERO;
         }
+        return dura;
     }
 }

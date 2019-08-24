@@ -2,6 +2,7 @@ package ru.allformine.afmbans.time;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Duration {
+    public static Duration ZERO = new Duration(0);
     private long seconds;
 
     private Duration(long seconds){
