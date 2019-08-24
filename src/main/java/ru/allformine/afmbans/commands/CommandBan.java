@@ -11,8 +11,8 @@ import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
+import ru.allformine.afmbans.time.Duration;
 
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
 

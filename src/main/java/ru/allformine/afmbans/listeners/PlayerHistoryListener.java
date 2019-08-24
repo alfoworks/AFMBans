@@ -7,6 +7,7 @@ import ru.allformine.afmbans.AFMBans;
 import ru.allformine.afmbans.PluginPermissions;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
+import ru.allformine.afmbans.net.api.ban.error.ApiError;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 
@@ -29,13 +30,13 @@ public class PlayerHistoryListener {
         try {
             response = BanAPI.getIpHistory(null, event.getTargetEntity().getConnection().getAddress().getAddress());
         } catch (Exception e) {
-            AFMBans.logger.error("Error checking player IPs");
-            e.printStackTrace();
-            return;
-        }
 
-        if (!response.ok) {
-            AFMBans.logger.error("API error checking player IPs: " + response.error.getBody().toString());
+            e.printStackTrace();
+            if(e instanceof ApiError){
+                AFMBans.logger.error("API error checking player IPs: " + ((ApiError) e).getBody().toString());
+            }else{
+                AFMBans.logger.error("Error checking player IPs");
+            }
             return;
         }
 
