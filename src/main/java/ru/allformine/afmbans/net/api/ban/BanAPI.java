@@ -1,6 +1,9 @@
 package ru.allformine.afmbans.net.api.ban;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.PluginUtils;
@@ -14,9 +17,11 @@ import ru.allformine.afmbans.time.Duration;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.InetAddress;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.List;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public class BanAPI {
@@ -129,5 +134,15 @@ public class BanAPI {
         json.addProperty("target", this.nickname.toLowerCase());
         json.addProperty("type", "un" + type.name());
         return makeRequest("amnesty", json);
+    }
+
+    public List<Boolean> massBanCheck(List<String> nicknames) throws IOException, ApiError {
+        JsonObject json = new JsonObject();
+        JsonArray players = new JsonArray();
+        for(String nickname: nicknames) players.add(nickname);
+        json.add("players", players);
+        JsonObject response = makeRequest("massbancheck", json);
+        Type listType = new TypeToken<List<Boolean>>(){}.getType();
+        return new Gson().fromJson(response, listType);
     }
 }
