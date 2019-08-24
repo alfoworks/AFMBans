@@ -5,6 +5,9 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColor;
+import org.spongepowered.api.text.format.TextColors;
+import ru.allformine.afmbans.PluginMessages;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.error.ApiError;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
@@ -14,6 +17,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class CommandDupeip extends Command {
@@ -25,33 +29,41 @@ public class CommandDupeip extends Command {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        Optional<String> protoNick = args.<String>getOne("player");
+        Optional<String> protoNick = args.getOne("player");
         if(protoNick.isPresent()){
             String nick = protoNick.get();
-            IpHistoryResponse response;
+            IpHistoryResponse ipHistoryResponse;
             try {
                 InetAddress address = getIpFromHistory(nick).ip;
-                response = BanAPI.getIpHistory(null, address);
+                ipHistoryResponse = BanAPI.getIpHistory(null, address);
             } catch (Exception e) { // ApiError, IOE
                 e.printStackTrace();
-                throw new CommandException(getReplyText("Произошла неизвестная ошибка.", TextType.ERROR));
+                throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
             }
-            List<IpHistoryRecord> items = response.items;
+            List<IpHistoryRecord> items = ipHistoryResponse.items;
             List<String> nicknames = new ArrayList<>();
-            for(IpHistoryRecord record: items){
-                String nickname = record.nickname;
-                nicknames.add(nickname);
+            for(IpHistoryRecord record: items) nicknames.add(record.nickname);
+            Map<String, Boolean> response;
+            try {
+                response = BanAPI.massBanCheck(nicknames);
+            } catch (Exception e) { // ApiError, IOE
+                e.printStackTrace();
+                throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
             }
-
             Text.Builder builder = Text.builder();
-            src.sendMessage(builder.toText());
+            builder.append(Text.of("Известные аккаунты игрока " + nick + ":\n"));
+            response.forEach((nickname, punished) -> {
+                TextColor color = TextColors.GREEN;
+                if(punished){
+                    color = TextColors.RED;
+                }
+                builder.append(colorText(nickname, color));
+                builder.append(Text.of(", "));
+            });
+            src.sendMessage(builder.build());
         }else{
             src.sendMessage(getReplyText("Недостаточно аргументов!", TextType.ERROR));
         }
-
-        // PluginStatics.DEBUG_MODE = !PluginStatics.DEBUG_MODE;
-
-        // src.sendMessage(getReplyText("Режим отладки был: " + (PluginStatics.DEBUG_MODE ? "включен" : "выключен"), TextType.OK));
 
         return CommandResult.success();
     }

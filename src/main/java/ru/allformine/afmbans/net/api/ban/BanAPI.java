@@ -138,7 +138,7 @@ public class BanAPI {
         return makeRequest("amnesty", json);
     }
 
-    public Map<String, Boolean> massBanCheck(List<String> nicknames) throws IOException, ApiError {
+    public static Map<String, Boolean> massBanCheck(List<String> nicknames) throws IOException, ApiError {
         JsonObject json = new JsonObject();
         JsonArray players = new JsonArray();
         for(String nickname: nicknames) players.add(nickname);
