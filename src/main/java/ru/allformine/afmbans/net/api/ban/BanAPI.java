@@ -18,6 +18,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.text.ParseException;
 
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public class BanAPI {
     private String nickname;
 

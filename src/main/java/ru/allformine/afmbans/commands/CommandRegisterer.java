@@ -27,7 +27,7 @@ public class CommandRegisterer {
                 .executor(new CommandUnban())
                 .build();
 
-        CommandSpec checkPlayerSpec = CommandSpec.builder()
+        CommandSpec dupeipSpec = CommandSpec.builder()
                 .description(Text.of("Проверить все IP игрока и его наказания."))
                 .permission(PluginPermissions.COMMAND_DUPEIP)
                 .arguments(
@@ -44,7 +44,7 @@ public class CommandRegisterer {
 
         Sponge.getCommandManager().register(plugin, banSpec, "ban", "afmban");
         Sponge.getCommandManager().register(plugin, unbanSpec, "unban", "afmunban");
-        Sponge.getCommandManager().register(plugin, checkPlayerSpec, "checkplayer", "afmcheckplayer", "cp", "afmcp");
+        Sponge.getCommandManager().register(plugin, dupeipSpec, "dupeip");
         Sponge.getCommandManager().register(plugin, debugModeSpec, "afmbansdebug", "debugmode", "dm", "afmdm");
     }
 }

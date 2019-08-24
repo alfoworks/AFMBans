@@ -26,21 +26,24 @@ public class CheckResponse {
 
     public CheckResponse(JsonObject response) throws ParseException {
         this.punished = response.get("punished").getAsBoolean();
-        if(response.has("reason")) {
-            JsonElement jsonReason = response.get("reason");
-            if(jsonReason.isJsonArray()){
-                Type listType = new TypeToken<List<String>>() {}.getType();
-                List<String> reasons = new Gson().fromJson(jsonReason, listType);
-                this.reason = new ArrayList<>();
-                reasons.forEach(reason -> this.reason.add(new Punish(reason)));
-            }else{
-                this.reason = new ArrayList<>();
-                this.reason.add(new Punish(jsonReason.getAsString()));
-            }
-        }
-        this.count = response.has("count")?response.get("count").getAsInt():0;
-        this.start = PluginStatics.dateFormat.parse(response.get("start").getAsString());
-        if(response.has("end")) this.end = PluginStatics.dateFormat.parse(response.get("end").getAsString());
         this.target = response.get("target").getAsString();
+        if(this.punished) {
+            if (response.has("reason")) {
+                JsonElement jsonReason = response.get("reason");
+                if (jsonReason.isJsonArray()) {
+                    Type listType = new TypeToken<List<String>>() {
+                    }.getType();
+                    List<String> reasons = new Gson().fromJson(jsonReason, listType);
+                    this.reason = new ArrayList<>();
+                    reasons.forEach(reason -> this.reason.add(new Punish(reason)));
+                } else {
+                    this.reason = new ArrayList<>();
+                    this.reason.add(new Punish(jsonReason.getAsString()));
+                }
+            }
+            this.count = response.has("count") ? response.get("count").getAsInt() : 0;
+            this.start = PluginStatics.dateFormat.parse(response.get("start").getAsString());
+            if (response.has("end")) this.end = PluginStatics.dateFormat.parse(response.get("end").getAsString());
+        }
     }
 }
