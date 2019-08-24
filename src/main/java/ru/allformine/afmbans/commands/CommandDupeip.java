@@ -12,6 +12,7 @@ import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,12 +37,14 @@ public class CommandDupeip extends Command {
                 throw new CommandException(getReplyText("Произошла неизвестная ошибка.", TextType.ERROR));
             }
             List<IpHistoryRecord> items = response.items;
-            Text.Builder builder = Text.builder();
+            List<String> nicknames = new ArrayList<>();
             for(IpHistoryRecord record: items){
                 String nickname = record.nickname;
-
+                nicknames.add(nickname);
             }
-            src.sendMessage(getReplyText(builder.toString(), TextType.OK));
+
+            Text.Builder builder = Text.builder();
+            src.sendMessage(builder.toText());
         }else{
             src.sendMessage(getReplyText("Недостаточно аргументов!", TextType.ERROR));
         }

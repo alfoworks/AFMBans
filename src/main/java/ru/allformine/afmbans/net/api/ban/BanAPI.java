@@ -21,7 +21,9 @@ import java.lang.reflect.Type;
 import java.net.InetAddress;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public class BanAPI {
@@ -136,13 +138,20 @@ public class BanAPI {
         return makeRequest("amnesty", json);
     }
 
-    public List<Boolean> massBanCheck(List<String> nicknames) throws IOException, ApiError {
+    public Map<String, Boolean> massBanCheck(List<String> nicknames) throws IOException, ApiError {
         JsonObject json = new JsonObject();
         JsonArray players = new JsonArray();
         for(String nickname: nicknames) players.add(nickname);
         json.add("players", players);
-        JsonObject response = makeRequest("massbancheck", json);
+        JsonObject jsonResponse = makeRequest("massbancheck", json);
         Type listType = new TypeToken<List<Boolean>>(){}.getType();
-        return new Gson().fromJson(response, listType);
+        List<Boolean> bannedList = new Gson().fromJson(jsonResponse, listType);
+        HashMap<String, Boolean> response = new HashMap<>();
+        for (int i = 0, nicknamesSize = nicknames.size(); i < nicknamesSize; i++) {
+            String nickname = nicknames.get(i);
+            Boolean banned = bannedList.get(i);
+            response.put(nickname, banned);
+        }
+        return response;
     }
 }
