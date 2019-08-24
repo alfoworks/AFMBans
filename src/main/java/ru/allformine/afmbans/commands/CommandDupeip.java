@@ -51,7 +51,7 @@ public class CommandDupeip extends Command {
             builder.append(Text.joinWith(Text.of(", "), text));
             src.sendMessage(builder.build());
         }else{
-            src.sendMessage(getReplyText("Недостаточно аргументов!", TextType.ERROR));
+            throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
         }
 
         return CommandResult.success();
