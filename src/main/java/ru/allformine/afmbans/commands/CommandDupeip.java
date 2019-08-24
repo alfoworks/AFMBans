@@ -1,6 +1,5 @@
 package ru.allformine.afmbans.commands;
 
-import com.google.gson.Gson;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -8,7 +7,6 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import ru.allformine.afmbans.PluginMessages;
-import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.error.ApiError;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
@@ -48,7 +46,6 @@ public class CommandDupeip extends Command {
             }
             Text.Builder builder = Text.builder();
             builder.append(Text.of("Известные аккаунты игрока " + nick + ":\n"));
-            PluginUtils.debug(new Gson().toJson(response));
             List<Text> text = new ArrayList<>();
             response.forEach((nickname, punished) -> text.add(colorText(nickname, punished ? TextColors.RED : TextColors.GREEN)));
             builder.append(Text.joinWith(Text.of(", "), text));
