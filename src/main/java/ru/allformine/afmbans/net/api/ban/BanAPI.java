@@ -145,7 +145,7 @@ public class BanAPI {
         json.add("players", players);
         JsonObject jsonResponse = makeRequest("massbancheck", json);
         Type listType = new TypeToken<List<Boolean>>(){}.getType();
-        List<Boolean> bannedList = new Gson().fromJson(jsonResponse, listType);
+        List<Boolean> bannedList = new Gson().fromJson(jsonResponse.get("items").getAsJsonArray(), listType);
         HashMap<String, Boolean> response = new HashMap<>();
         for (int i = 0, nicknamesSize = nicknames.size(); i < nicknamesSize; i++) {
             String nickname = nicknames.get(i);
