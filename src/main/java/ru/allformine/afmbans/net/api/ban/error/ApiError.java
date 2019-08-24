@@ -3,6 +3,7 @@ package ru.allformine.afmbans.net.api.ban.error;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+@SuppressWarnings("unused")
 public class ApiError extends Exception {
     private int errorCode;
     private String description;
