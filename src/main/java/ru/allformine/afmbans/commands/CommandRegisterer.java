@@ -46,6 +46,7 @@ public class CommandRegisterer {
                 .description(Text.of("Отъебись"))
                 .permission(PluginPermissions.COMMAND_DEBUG)
                 .executor(new CommandDebug())
+                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("command"))))
                 .build();
 
         Sponge.getCommandManager().register(plugin, banSpec, "ban", "afmban");
