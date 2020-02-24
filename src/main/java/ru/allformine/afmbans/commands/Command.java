@@ -17,7 +17,7 @@ public class Command implements CommandExecutor {
 
     public Text getReplyText(String string, TextType type) {
         TextColor color = TextColors.BLACK;
-        string = "AFMBans > " + string;
+
         if (type == TextType.ERROR) {
             color = TextColors.RED;
         } else if (type == TextType.OK) {
@@ -26,7 +26,11 @@ public class Command implements CommandExecutor {
             color = TextColors.BLUE;
         }
 
-        return colorText(string, color);
+        return Text.builder()
+                .append(Text.of("AFMBans")).color(color)
+                .append(Text.of(" > ")).color(TextColors.WHITE)
+                .append(Text.of(string))
+                .build();
     }
 
     public Text colorText(String string, TextColor color){

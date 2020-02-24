@@ -42,9 +42,16 @@ public class CommandRegisterer {
                 .executor(new CommandDebugMode())
                 .build();
 
+        CommandSpec debugSpec = CommandSpec.builder()
+                .description(Text.of("Отъебись"))
+                .permission(PluginPermissions.COMMAND_DEBUG)
+                .executor(new CommandDebug())
+                .build();
+
         Sponge.getCommandManager().register(plugin, banSpec, "ban", "afmban");
         Sponge.getCommandManager().register(plugin, unbanSpec, "unban", "afmunban");
         Sponge.getCommandManager().register(plugin, dupeipSpec, "dupeip");
         Sponge.getCommandManager().register(plugin, debugModeSpec, "afmbansdebug", "debugmode", "dm", "afmdm");
+        Sponge.getCommandManager().register(plugin, debugSpec, "debug", "dbg", "d", "afmd");
     }
 }
