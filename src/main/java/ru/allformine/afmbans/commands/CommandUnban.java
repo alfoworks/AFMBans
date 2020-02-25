@@ -6,11 +6,10 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import ru.allformine.afmbans.ActionType;
 import ru.allformine.afmbans.PluginMessages;
-import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
-import ru.allformine.afmbans.net.api.ban.error.ApiException;
+import ru.allformine.afmbans.net.api.ban.error.ApiError;
 
 import java.util.Optional;
 
@@ -22,9 +21,10 @@ public class CommandUnban extends Command {
             throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
         }
         BanAPI banApi = new BanAPI(nickname.get());
+        boolean success;
         try {
-            banApi.amnesty(src, PunishType.BAN).get("ok").getAsBoolean();
-        } catch (ApiException error) {
+            success = banApi.amnesty(src, PunishType.BAN).get("ok").getAsBoolean();
+        } catch (ApiError error) {
             if (error.getErrorCode() == 101) {
                 throw new CommandException(getReplyText(PluginMessages.PLAYER_NOT_BANNED, TextType.ERROR));
             }
@@ -33,10 +33,12 @@ public class CommandUnban extends Command {
             e.printStackTrace();
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }
-
-        src.sendMessage(getReplyText(PluginMessages.UNBAN_SUCCESSFUL, TextType.OK));
-
-        PluginStatics.broadcastChannel.send(PluginUtils.getPunishMessage(src, nickname.get(), ActionType.UNBAN));
+        if(success) {
+            src.sendMessage(getReplyText(PluginMessages.UNBAN_SUCCESSFUL, TextType.OK));
+            PluginUtils.getPunishMessage(src, nickname.get(), ActionType.UNBAN);
+        }else{
+            src.sendMessage(getReplyText(PluginMessages.PLAYER_NOT_BANNED, TextType.OK));
+        }
         return CommandResult.success();
     }
 }
