@@ -1,15 +1,16 @@
-package ru.allformine.afmbans.commands;
+package ru.allformine.afmbans;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 import ru.allformine.afmbans.PluginPermissions;
+import ru.allformine.afmbans.commands.*;
 
 public class CommandRegisterer {
     public static void registerCommands(Object plugin){
         CommandSpec banSpec = CommandSpec.builder()
-                .description(Text.of("Забанить игрока."))
+                .description(Text.of("Забанить игрока навсегда."))
                 .permission(PluginPermissions.COMMAND_BAN)
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))),
@@ -17,6 +18,17 @@ public class CommandRegisterer {
                         GenericArguments.optional(GenericArguments.string(Text.of("unit"))),
                         GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))))
                 .executor(new CommandBan())
+                .build();
+
+        CommandSpec tempBanSpec = CommandSpec.builder()
+                .description(Text.of("Временно забанить игрока."))
+                .permission(PluginPermissions.COMMAND_TEMP_BAN)
+                .arguments(
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))),
+                        GenericArguments.onlyOne(GenericArguments.integer(Text.of("time"))),
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("unit"))),
+                        GenericArguments.onlyOne(GenericArguments.remainingJoinedStrings(Text.of("reason"))))
+                .executor(new CommandTempBan())
                 .build();
 
         CommandSpec unbanSpec = CommandSpec.builder()
@@ -50,6 +62,7 @@ public class CommandRegisterer {
                 .build();
 
         Sponge.getCommandManager().register(plugin, banSpec, "ban", "afmban");
+        Sponge.getCommandManager().register(plugin, tempBanSpec, "tempban", "afmtempban");
         Sponge.getCommandManager().register(plugin, unbanSpec, "unban", "afmunban");
         Sponge.getCommandManager().register(plugin, dupeipSpec, "dupeip");
         Sponge.getCommandManager().register(plugin, debugModeSpec, "afmbansdebug", "debugmode", "dm", "afmdm");
