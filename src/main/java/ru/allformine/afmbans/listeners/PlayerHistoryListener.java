@@ -5,6 +5,7 @@ import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.text.channel.MessageChannel;
 import ru.allformine.afmbans.AFMBans;
 import ru.allformine.afmbans.PluginPermissions;
+import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.error.ApiException;
@@ -51,6 +52,6 @@ public class PlayerHistoryListener {
             return;
         }
 
-        MessageChannel.permission(PluginPermissions.PLAYER_JOIN_NOTIFY).send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), nicks));
+        PluginStatics.getNotifyChannel().send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), nicks));
     }
 }

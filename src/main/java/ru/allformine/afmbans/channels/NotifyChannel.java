@@ -21,8 +21,8 @@ public class NotifyChannel implements MessageChannel {
     public Optional<Text> transformMessage(Object sender, MessageReceiver recipient, Text original, ChatType type) {
 
         return Optional.of(Text.builder()
-                .append(Text.of("AFMBans")).color(TextColors.BLUE)
-                .append(Text.of(" > ")).color(TextColors.RESET)
+                .append(Text.of("AFMBans").toBuilder().color(TextColors.BLUE).build())
+                .append(Text.of(" > ").toBuilder().color(TextColors.RESET).build())
                 .append(original)
                 .build());
     }

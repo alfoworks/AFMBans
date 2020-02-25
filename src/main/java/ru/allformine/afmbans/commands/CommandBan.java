@@ -20,8 +20,8 @@ public class CommandBan extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Optional<String> protoNick = args.getOne("player");
-        if (!protoNick.isPresent())
-            throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
+            if (!protoNick.isPresent())
+                throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
         String nick = protoNick.get();
         BanAPI banApi = new BanAPI(nick);
 
