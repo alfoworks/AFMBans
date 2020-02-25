@@ -7,7 +7,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameLoadCompleteEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
-import ru.allformine.afmbans.commands.CommandRegisterer;
 import ru.allformine.afmbans.listeners.BanEventListener;
 import ru.allformine.afmbans.listeners.PlayerHistoryListener;
 

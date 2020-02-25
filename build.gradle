@@ -12,4 +12,20 @@ dependencies {
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
+jar {
+    archiveName "afmbans.jar"
+    baseName = 'afmbans'
+    version =  version
+}
+
+task copyForShared(type: Copy){
+    from jar
+    into 'build/libs/'
+    rename { String fileName ->
+        // a simple way is to remove the "-$version" from the jar filename
+        // but you can customize the filename replacement rule as you wish.
+        fileName.replace("-$project.version", "")
+    }
+}
+
 sponge.plugin.id = 'afmbans'

@@ -20,44 +20,17 @@ public class CommandBan extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Optional<String> protoNick = args.getOne("player");
-        if (!protoNick.isPresent())
-            throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
+            if (!protoNick.isPresent())
+                throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
         String nick = protoNick.get();
         BanAPI banApi = new BanAPI(nick);
-
-        Optional<String> time = args.getOne("time");
-        Optional<String> unit = args.getOne("unit");
-
-        Duration duration = null;
-
-        if (time.isPresent() && unit.isPresent()) {
-            // Темпбан
-
-            int timeInt;
-
-            try {
-                timeInt = Integer.parseInt(time.get());
-            } catch (NumberFormatException e) {
-                throw new CommandException(getReplyText("Вы указали нечисловое значение.", TextType.ERROR));
-            }
-
-            if (timeInt < 0) throw new CommandException(getReplyText("Укажите число > 0.", TextType.ERROR));
-
-            if (Arrays.stream(PluginStatics.TEMP_PUNISH_TIME_UNITS).noneMatch(unit.get()::equalsIgnoreCase)) {
-                throw new CommandException(getReplyText("Неверная еденица времени, доступные единицы: " + String.join(", ", PluginStatics.TEMP_PUNISH_TIME_UNITS), TextType.ERROR));
-            }
-        } else if (time.isPresent() || unit.isPresent()) {
-            // Что-то не указано для темпбана
-
-            throw new CommandException(getReplyText("Укажите время в формате <количество> <единица времени>", TextType.ERROR));
-        }
 
         String reason = args.<String>getOne("reason").orElse(PluginStatics.DEFAULT_REASON);
 
         boolean ok;
 
         try {
-            ok = banApi.punish(src, PunishType.BAN, reason, duration, null).get("ok").getAsBoolean();
+            ok = banApi.punish(src, PunishType.BAN, reason, null, null).get("ok").getAsBoolean();
         } catch (Exception e) {
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }
@@ -67,7 +40,7 @@ public class CommandBan extends Command {
         Sponge.getServer().getPlayer(nick).ifPresent(player -> player.kick(PluginUtils.getBanMessageForPlayer(src.getName(), reason)));
 
         src.sendMessage(getReplyText(PluginMessages.BAN_SUCCESSFUL, TextType.OK));
-        Sponge.getServer().getBroadcastChannel().send(PluginUtils.getPunishMessage(src, nick, ActionType.BAN));
+        PluginStatics.broadcastChannel.send(PluginUtils.getPunishMessage(src, nick, ActionType.BAN));
 
         return CommandResult.success();
     }

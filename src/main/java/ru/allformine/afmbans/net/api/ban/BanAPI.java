@@ -8,7 +8,7 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.JsonRequest;
-import ru.allformine.afmbans.net.api.ban.error.ApiError;
+import ru.allformine.afmbans.net.api.ban.error.ApiException;
 import ru.allformine.afmbans.net.api.ban.request.HistoryFilter;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
 import ru.allformine.afmbans.net.api.ban.response.HistoryResponse;
@@ -37,7 +37,7 @@ public class BanAPI {
         this.nickname = player.getName();
     }
 
-    private static JsonObject makeRequest(String method, JsonObject json) throws IOException, ApiError {
+    private static JsonObject makeRequest(String method, JsonObject json) throws IOException, ApiException {
         PluginUtils.debug("Sending JSON: \"" + json.toString() + "\" using method \"" + method + "\"");
         JsonRequest req = new JsonRequest(
                 new URL(
@@ -47,12 +47,12 @@ public class BanAPI {
         );
         JsonObject jsonResponse = req.getResponseJson();
         if(!jsonResponse.get("ok").getAsBoolean()){
-            throw new ApiError(jsonResponse);
+            throw new ApiException(jsonResponse);
         }
         return jsonResponse;
     }
 
-    public static JsonObject addIpToHistory(String nickname, InetAddress address) throws IOException, ApiError {
+    public static JsonObject addIpToHistory(String nickname, InetAddress address) throws IOException, ApiException {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", nickname);
         json.addProperty("ip", address.getHostAddress());
@@ -60,7 +60,7 @@ public class BanAPI {
         return makeRequest("ip", json);
     }
 
-    public static IpHistoryResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws IOException, ApiError {
+    public static IpHistoryResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws IOException, ApiException {
         JsonObject json = new JsonObject();
         JsonObject filter = new JsonObject();
         if(nickname != null) filter.addProperty("nickname__iexact", nickname);
@@ -71,21 +71,21 @@ public class BanAPI {
         return new IpHistoryResponse(resp);
     }
 
-    public static CheckResponse checkIpBan(InetAddress address) throws IOException, ParseException, ApiError {
+    public static CheckResponse checkIpBan(InetAddress address) throws IOException, ParseException, ApiException {
         JsonObject json = new JsonObject();
         json.addProperty("ip", address.getHostAddress());
         json.addProperty("type", "check");
         return new CheckResponse(makeRequest("ip", json));
     }
 
-    public static JsonObject unbanIp(InetAddress address) throws IOException, ApiError {
+    public static JsonObject unbanIp(InetAddress address) throws IOException, ApiException {
         JsonObject json = new JsonObject();
         json.addProperty("ip", address.getHostAddress());
         json.addProperty("type", "unban");
         return makeRequest("ip", json);
     }
 
-    public static HistoryResponse getHistory(HistoryFilter filter) throws ParseException, IOException, ApiError {
+    public static HistoryResponse getHistory(HistoryFilter filter) throws ParseException, IOException, ApiException {
         JsonObject json = new JsonObject();
         json.add("filter", filter.getJson());
         json.addProperty("type", "get");
@@ -93,7 +93,7 @@ public class BanAPI {
         return new HistoryResponse(resp);
     }
 
-    public CheckResponse check(PunishType type, @Nullable InetAddress address) throws IOException, ParseException, ApiError {
+    public CheckResponse check(PunishType type, @Nullable InetAddress address) throws IOException, ParseException, ApiException {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", type.name());
@@ -106,7 +106,7 @@ public class BanAPI {
     }
 
     @Deprecated
-    public int getWarns() throws IOException, ApiError {
+    public int getWarns() throws IOException, ApiException {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", "Warn");
@@ -115,7 +115,7 @@ public class BanAPI {
     }
 
     public JsonObject punish(CommandSource commandSource, PunishType type, @Nullable String reason,
-                             @Nullable Duration duration, @Nullable InetAddress address) throws IOException, ApiError {
+                             @Nullable Duration duration, @Nullable InetAddress address) throws IOException, ApiException {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname);
@@ -130,7 +130,7 @@ public class BanAPI {
         return makeRequest("punish", json);
     }
 
-    public JsonObject amnesty(CommandSource commandSource, PunishType type) throws IOException, ApiError {
+    public JsonObject amnesty(CommandSource commandSource, PunishType type) throws IOException, ApiException {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname.toLowerCase());
@@ -138,7 +138,7 @@ public class BanAPI {
         return makeRequest("amnesty", json);
     }
 
-    public static Map<String, Boolean> massBanCheck(List<String> nicknames) throws IOException, ApiError {
+    public static Map<String, Boolean> massBanCheck(List<String> nicknames) throws IOException, ApiException {
         JsonObject json = new JsonObject();
         JsonArray players = new JsonArray();
         for(String nickname: nicknames) players.add(nickname);

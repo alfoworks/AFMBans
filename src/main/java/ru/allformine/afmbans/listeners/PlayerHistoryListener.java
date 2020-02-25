@@ -5,9 +5,10 @@ import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.text.channel.MessageChannel;
 import ru.allformine.afmbans.AFMBans;
 import ru.allformine.afmbans.PluginPermissions;
+import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
-import ru.allformine.afmbans.net.api.ban.error.ApiError;
+import ru.allformine.afmbans.net.api.ban.error.ApiException;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 
@@ -32,8 +33,8 @@ public class PlayerHistoryListener {
         } catch (Exception e) {
 
             e.printStackTrace();
-            if(e instanceof ApiError){
-                AFMBans.logger.error("API error checking player IPs: " + ((ApiError) e).getBody().toString());
+            if(e instanceof ApiException){
+                AFMBans.logger.error("API error checking player IPs: " + ((ApiException) e).getBody().toString());
             }else{
                 AFMBans.logger.error("Error checking player IPs");
             }
@@ -51,6 +52,6 @@ public class PlayerHistoryListener {
             return;
         }
 
-        MessageChannel.permission(PluginPermissions.PLAYER_JOIN_NOTIFY).send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), nicks));
+        PluginStatics.getNotifyChannel().send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), nicks));
     }
 }
