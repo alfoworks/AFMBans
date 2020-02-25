@@ -19,12 +19,10 @@ public class CommandDebug extends Command {
             throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
         }
 
-        switch (protoCommand.get().toLowerCase()) {
-            case "testnotify":
-                PluginStatics.getNotifyChannel().send(Text.of("Test notify, i love noire"));
-                break;
-            default:
-                throw new CommandException(getReplyText("Неизвестная подкоманда!", TextType.ERROR));
+        if ("testnotify".equals(protoCommand.get().toLowerCase())) {
+            PluginStatics.getNotifyChannel().send(Text.of("Test notify, i love noire"));
+        } else {
+            throw new CommandException(getReplyText("Неизвестная подкоманда!", TextType.ERROR));
         }
 
         return CommandResult.success();

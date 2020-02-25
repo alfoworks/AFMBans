@@ -9,7 +9,7 @@ import org.spongepowered.api.text.format.TextColors;
 import ru.allformine.afmbans.AFMBans;
 import ru.allformine.afmbans.PluginMessages;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
-import ru.allformine.afmbans.net.api.ban.error.ApiError;
+import ru.allformine.afmbans.net.api.ban.error.ApiException;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 
@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class CommandDupeip extends Command {
 
-    private IpHistoryRecord getIpFromHistory(String nickname) throws IOException, ApiError {
+    private IpHistoryRecord getIpFromHistory(String nickname) throws IOException, ApiException {
         IpHistoryResponse response = BanAPI.getIpHistory(nickname, null);
         return response.items.get(response.items.size() - 1);
     }
@@ -45,7 +45,7 @@ public class CommandDupeip extends Command {
         } catch (IOException e) {
             e.printStackTrace();
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
-        } catch (ApiError e){
+        } catch (ApiException e){
             AFMBans.logger.error("[" + e.getErrorCode() + "]: " + e.getDescription());
             throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
         }
