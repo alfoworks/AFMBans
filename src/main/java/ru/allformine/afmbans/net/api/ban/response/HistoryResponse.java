@@ -18,7 +18,7 @@ public class HistoryResponse {
     public HistoryResponse(JsonObject object) throws ParseException {
         JsonArray items = object.getAsJsonArray("items");
         this.items = new ArrayList<>();
-        for(JsonElement element : items){
+        for (JsonElement element : items) {
             HistoryRecord record = new HistoryRecord((JsonObject) element);
             this.items.add(record);
         }

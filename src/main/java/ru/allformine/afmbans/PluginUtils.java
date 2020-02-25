@@ -17,7 +17,7 @@ public class PluginUtils {
     public static Text getPunishMessage(CommandSource src, String target, ActionType type) {
         String action = "";
 
-        switch(type) {
+        switch (type) {
             case BAN:
                 action = "забанил";
                 break;
@@ -86,7 +86,7 @@ public class PluginUtils {
     public static String getTrueNickCase(String nickname) {
         Optional<UserStorageService> userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
 
-        if (userStorage.isPresent()&& userStorage.get().get(nickname).isPresent()) {
+        if (userStorage.isPresent() && userStorage.get().get(nickname).isPresent()) {
             return userStorage.get().get(nickname).get().getName();
         }
 
@@ -99,7 +99,7 @@ public class PluginUtils {
         }
 
         Duration dura;
-        switch(unit) {
+        switch (unit) {
             case "s":
                 dura = Duration.ofSeconds(time);
                 break;

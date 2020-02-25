@@ -14,7 +14,7 @@ public class IpHistoryRecord {
         this.ip = InetAddress.getByName(record.get("ip").getAsString());
     }
 
-    public String toString(){
+    public String toString() {
         return this.nickname + "@" + this.ip.getHostAddress();
     }
 }

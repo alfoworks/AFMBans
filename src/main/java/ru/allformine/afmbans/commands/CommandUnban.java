@@ -9,7 +9,7 @@ import ru.allformine.afmbans.PluginMessages;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
-import ru.allformine.afmbans.net.api.ban.error.ApiError;
+import ru.allformine.afmbans.net.api.ban.error.ApiException;
 
 import java.util.Optional;
 
@@ -24,7 +24,7 @@ public class CommandUnban extends Command {
         boolean success;
         try {
             success = banApi.amnesty(src, PunishType.BAN).get("ok").getAsBoolean();
-        } catch (ApiError error) {
+        } catch (ApiException error) {
             if (error.getErrorCode() == 101) {
                 throw new CommandException(getReplyText(PluginMessages.PLAYER_NOT_BANNED, TextType.ERROR));
             }
@@ -33,10 +33,10 @@ public class CommandUnban extends Command {
             e.printStackTrace();
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }
-        if(success) {
+        if (success) {
             src.sendMessage(getReplyText(PluginMessages.UNBAN_SUCCESSFUL, TextType.OK));
             PluginUtils.getPunishMessage(src, nickname.get(), ActionType.UNBAN);
-        }else{
+        } else {
             src.sendMessage(getReplyText(PluginMessages.PLAYER_NOT_BANNED, TextType.OK));
         }
         return CommandResult.success();

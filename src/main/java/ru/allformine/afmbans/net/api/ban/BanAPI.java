@@ -33,7 +33,7 @@ public class BanAPI {
         this.nickname = nickname;
     }
 
-    public BanAPI(Player player){
+    public BanAPI(Player player) {
         this.nickname = player.getName();
     }
 
@@ -46,7 +46,7 @@ public class BanAPI {
                 json
         );
         JsonObject jsonResponse = req.getResponseJson();
-        if(!jsonResponse.get("ok").getAsBoolean()){
+        if (!jsonResponse.get("ok").getAsBoolean()) {
             throw new ApiException(jsonResponse);
         }
         return jsonResponse;
@@ -63,8 +63,8 @@ public class BanAPI {
     public static IpHistoryResponse getIpHistory(@Nullable String nickname, @Nullable InetAddress address) throws IOException, ApiException {
         JsonObject json = new JsonObject();
         JsonObject filter = new JsonObject();
-        if(nickname != null) filter.addProperty("nickname__iexact", nickname);
-        if(address != null) filter.addProperty("ip_address", address.getHostAddress());
+        if (nickname != null) filter.addProperty("nickname__iexact", nickname);
+        if (address != null) filter.addProperty("ip_address", address.getHostAddress());
         json.add("filter", filter);
         json.addProperty("type", "get");
         JsonObject resp = makeRequest("ip", json);
@@ -97,7 +97,7 @@ public class BanAPI {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
         json.addProperty("type", type.name());
-        if(type == PunishType.BAN && address != null){
+        if (type == PunishType.BAN && address != null) {
             json.addProperty("ip", address.getHostAddress());
         }
         JsonObject res = makeRequest("check", json);
@@ -120,9 +120,9 @@ public class BanAPI {
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname);
         json.addProperty("type", type.name());
-        if(reason != null) json.addProperty("reason", reason);
-        if(duration != null) json.addProperty("duration", duration.getSeconds());
-        if(address != null){
+        if (reason != null) json.addProperty("reason", reason);
+        if (duration != null) json.addProperty("duration", duration.getSeconds());
+        if (address != null) {
             json.addProperty("ip", address.getHostAddress());
             json.addProperty("use_ip", true);
         }
@@ -141,10 +141,11 @@ public class BanAPI {
     public static Map<String, Boolean> massBanCheck(List<String> nicknames) throws IOException, ApiException {
         JsonObject json = new JsonObject();
         JsonArray players = new JsonArray();
-        for(String nickname: nicknames) players.add(nickname);
+        for (String nickname : nicknames) players.add(nickname);
         json.add("players", players);
         JsonObject jsonResponse = makeRequest("massbancheck", json);
-        Type listType = new TypeToken<List<Boolean>>(){}.getType();
+        Type listType = new TypeToken<List<Boolean>>() {
+        }.getType();
         List<Boolean> bannedList = new Gson().fromJson(jsonResponse.get("items").getAsJsonArray(), listType);
         HashMap<String, Boolean> response = new HashMap<>();
         for (int i = 0, nicknamesSize = nicknames.size(); i < nicknamesSize; i++) {

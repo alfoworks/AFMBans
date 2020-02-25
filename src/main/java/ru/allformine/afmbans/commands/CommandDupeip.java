@@ -40,12 +40,12 @@ public class CommandDupeip extends Command {
             ipHistoryResponse = BanAPI.getIpHistory(null, address);
             List<IpHistoryRecord> items = ipHistoryResponse.items;
             List<String> nicknames = new ArrayList<>();
-            for(IpHistoryRecord record: items) nicknames.add(record.nickname);
+            for (IpHistoryRecord record : items) nicknames.add(record.nickname);
             response = BanAPI.massBanCheck(nicknames);
         } catch (IOException e) {
             e.printStackTrace();
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
-        } catch (ApiException e){
+        } catch (ApiException e) {
             AFMBans.logger.error("[" + e.getErrorCode() + "]: " + e.getDescription());
             throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
         }

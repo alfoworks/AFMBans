@@ -4,11 +4,10 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
-import ru.allformine.afmbans.PluginPermissions;
 import ru.allformine.afmbans.commands.*;
 
 public class CommandRegisterer {
-    public static void registerCommands(Object plugin){
+    public static void registerCommands(Object plugin) {
         CommandSpec banSpec = CommandSpec.builder()
                 .description(Text.of("Забанить игрока навсегда."))
                 .permission(PluginPermissions.COMMAND_BAN)

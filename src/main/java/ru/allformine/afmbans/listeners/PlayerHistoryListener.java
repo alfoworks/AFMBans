@@ -2,9 +2,7 @@ package ru.allformine.afmbans.listeners;
 
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
-import org.spongepowered.api.text.channel.MessageChannel;
 import ru.allformine.afmbans.AFMBans;
-import ru.allformine.afmbans.PluginPermissions;
 import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
@@ -33,9 +31,9 @@ public class PlayerHistoryListener {
         } catch (Exception e) {
 
             e.printStackTrace();
-            if(e instanceof ApiException){
+            if (e instanceof ApiException) {
                 AFMBans.logger.error("API error checking player IPs: " + ((ApiException) e).getBody().toString());
-            }else{
+            } else {
                 AFMBans.logger.error("Error checking player IPs");
             }
             return;

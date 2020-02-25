@@ -33,7 +33,7 @@ public class Command implements CommandExecutor {
                 .build();
     }
 
-    public Text colorText(String string, TextColor color){
+    public Text colorText(String string, TextColor color) {
         return Text.builder().append(Text.of(string)).color(color).build();
     }
 

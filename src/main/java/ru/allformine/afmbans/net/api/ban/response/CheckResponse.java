@@ -24,7 +24,7 @@ public class CheckResponse {
     public CheckResponse(JsonObject response) throws ParseException {
         this.punished = response.get("punished").getAsBoolean();
         this.target = response.get("target").getAsString();
-        if(this.punished) {
+        if (this.punished) {
             if (response.has("reason")) {
                 JsonElement jsonReason = response.get("reason");
                 if (jsonReason.isJsonArray()) {
