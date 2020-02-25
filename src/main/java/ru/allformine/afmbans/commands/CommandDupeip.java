@@ -22,9 +22,12 @@ import java.util.Optional;
 
 public class CommandDupeip extends Command {
 
-    private IpHistoryRecord getIpFromHistory(String nickname) throws IOException, ApiError {
+    private Optional<IpHistoryRecord> getIpFromHistory(String nickname) throws IOException, ApiError {
         IpHistoryResponse response = BanAPI.getIpHistory(nickname, null);
-        return response.items.get(response.items.size() - 1);
+        if(response.items.size() > 0)
+            return Optional.of(response.items.get(response.items.size() - 1));
+        else return Optional.empty();
+
     }
 
     @Override
@@ -36,7 +39,10 @@ public class CommandDupeip extends Command {
         IpHistoryResponse ipHistoryResponse;
         Map<String, Boolean> response;
         try {
-            InetAddress address = getIpFromHistory(nick).ip;
+            Optional<IpHistoryRecord> ip_record = getIpFromHistory(nick);
+            if(!ip_record.isPresent())
+                throw new CommandException(getReplyText(PluginMessages.PLAYER_UNKNOWN, TextType.ERROR));
+            InetAddress address = ip_record.get().ip;
             ipHistoryResponse = BanAPI.getIpHistory(null, address);
             List<IpHistoryRecord> items = ipHistoryResponse.items;
             List<String> nicknames = new ArrayList<>();
