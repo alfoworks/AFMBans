@@ -27,7 +27,7 @@ public class CommandRegisterer {
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))),
                         GenericArguments.onlyOne(GenericArguments.integer(Text.of("time"))),
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("unit"))),
-                        GenericArguments.onlyOne(GenericArguments.remainingJoinedStrings(Text.of("reason"))))
+                        GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))))
                 .executor(new CommandTempBan())
                 .build();
 
