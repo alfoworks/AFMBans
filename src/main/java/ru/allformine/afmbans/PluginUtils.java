@@ -2,13 +2,20 @@ package ru.allformine.afmbans;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
+import ru.allformine.afmbans.net.api.ban.BanAPI;
+import ru.allformine.afmbans.net.api.ban.error.ApiException;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
+import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
+import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 import ru.allformine.afmbans.time.Duration;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
@@ -125,5 +132,22 @@ public class PluginUtils {
                 dura = Duration.ZERO;
         }
         return dura;
+    }
+
+    public static InetAddress tryGetAddressForNick(final String nick) throws IOException, ApiException {
+        final Optional<Player> playerOptional = Sponge.getServer().getPlayer(nick);
+
+        if (playerOptional.isPresent()) {
+            return playerOptional.get().getConnection().getAddress().getAddress();
+        }
+
+        IpHistoryResponse response = BanAPI.getIpHistory(nick, null);
+        if (response.items.size() == 0) {
+            return null;
+        }
+
+        IpHistoryRecord lastItem = response.items.get(response.items.size() - 1);
+
+        return lastItem.ip;
     }
 }

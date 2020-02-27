@@ -11,7 +11,10 @@ import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
+import ru.allformine.afmbans.net.api.ban.error.ApiException;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Optional;
 
 public class CommandBan extends Command {
@@ -21,6 +24,21 @@ public class CommandBan extends Command {
         if (!protoNick.isPresent())
             throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
         String nick = protoNick.get();
+
+        InetAddress ip = null;
+
+        if (args.hasAny("ip")) {
+            try {
+                ip = PluginUtils.tryGetAddressForNick(nick);
+            } catch (IOException | ApiException e) {
+                throw new CommandException(getReplyText("Произошла ошибка при попытке получения IP игрока.", TextType.ERROR));
+            }
+
+            if (ip == null) {
+                throw new CommandException(getReplyText("IP этого игрока не найден.", TextType.ERROR));
+            }
+        }
+
         BanAPI banApi = new BanAPI(nick);
 
         String reason = args.<String>getOne("reason").orElse(PluginStatics.DEFAULT_REASON);
@@ -28,7 +46,7 @@ public class CommandBan extends Command {
         boolean ok;
 
         try {
-            ok = banApi.punish(src, PunishType.BAN, reason, null, null).get("ok").getAsBoolean();
+            ok = banApi.punish(src, PunishType.BAN, reason, null, ip).get("ok").getAsBoolean();
         } catch (Exception e) {
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }

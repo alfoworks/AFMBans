@@ -11,8 +11,11 @@ import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
+import ru.allformine.afmbans.net.api.ban.error.ApiException;
 import ru.allformine.afmbans.time.Duration;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -36,6 +39,19 @@ public class CommandTempBan extends Command {
             throw new CommandException(getReplyText("Неверная еденица времени, доступные единицы: " + String.join(", ", PluginStatics.TEMP_PUNISH_TIME_UNITS), TextType.ERROR));
         }
 
+        InetAddress ip = null;
+        if (args.hasAny("ip")) {
+            try {
+                ip = PluginUtils.tryGetAddressForNick(nick.get());
+            } catch (IOException | ApiException e) {
+                throw new CommandException(getReplyText("Произошла ошибка при попытке получения IP игрока.", TextType.ERROR));
+            }
+
+            if (ip == null) {
+                throw new CommandException(getReplyText("IP этого игрока не найден.", TextType.ERROR));
+            }
+        }
+
         String reason = args.<String>getOne("reason").orElse(PluginStatics.DEFAULT_REASON);
         Duration durka = PluginUtils.getDuration(unit.get(), time.get());
         BanAPI banApi = new BanAPI(nick.get());
@@ -43,7 +59,7 @@ public class CommandTempBan extends Command {
         boolean ok;
 
         try {
-            ok = banApi.punish(src, PunishType.BAN, reason, durka, null).get("ok").getAsBoolean();
+            ok = banApi.punish(src, PunishType.BAN, reason, durka, ip).get("ok").getAsBoolean();
         } catch (Exception e) {
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         }
