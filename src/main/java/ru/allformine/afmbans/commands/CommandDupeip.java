@@ -19,41 +19,67 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CommandDupeip extends Command {
 
-    private IpHistoryRecord getIpFromHistory(String nickname) throws IOException, ApiException {
+    private Optional<IpHistoryRecord> getIpFromHistory(String nickname) throws IOException, ApiException {
         IpHistoryResponse response = BanAPI.getIpHistory(nickname, null);
-        return response.items.get(response.items.size() - 1);
+
+        return response.items.size() > 0 ? Optional.of(response.items.get(response.items.size() - 1)) : Optional.empty();
     }
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Optional<String> protoNick = args.getOne("player");
+
         if (!protoNick.isPresent())
             throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
+
         String nick = protoNick.get();
         IpHistoryResponse ipHistoryResponse;
         Map<String, Boolean> response;
+
         try {
-            InetAddress address = getIpFromHistory(nick).ip;
+            Optional<IpHistoryRecord> ip_record = getIpFromHistory(nick);
+            if(!ip_record.isPresent())
+                throw new CommandException(getReplyText(PluginMessages.PLAYER_UNKNOWN, TextType.ERROR));
+            InetAddress address = ip_record.get().ip;
             ipHistoryResponse = BanAPI.getIpHistory(null, address);
             List<IpHistoryRecord> items = ipHistoryResponse.items;
             List<String> nicknames = new ArrayList<>();
+
             for (IpHistoryRecord record : items) nicknames.add(record.nickname);
+
             response = BanAPI.massBanCheck(nicknames);
         } catch (IOException e) {
             e.printStackTrace();
+
             throw new CommandException(getReplyText(PluginMessages.UNKNOWN_ERROR, TextType.ERROR));
         } catch (ApiException e) {
             AFMBans.logger.error("[" + e.getErrorCode() + "]: " + e.getDescription());
+
             throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
         }
+
+        response = response.entrySet().stream().filter(x -> !x.getKey().equalsIgnoreCase(nick)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        if (response.size() < 1) {
+            throw new CommandException(getReplyText("У этого игрока нет дополнительных аккаунтов.", TextType.ERROR));
+        }
+
         Text.Builder builder = Text.builder();
-        builder.append(Text.of("Известные аккаунты игрока " + nick + ":\n"));
-        List<Text> text = new ArrayList<>();
-        response.forEach((nickname, punished) -> text.add(colorText(nickname, punished ? TextColors.RED : TextColors.GREEN)));
-        builder.append(Text.joinWith(Text.of(", "), text));
+
+        builder.append(getReplyText(String.format("Известные аккаунты игрока %s:", nick), TextType.OK));
+
+        response.forEach((nickname, punished) -> builder
+                .append(Text.of("\n"))
+                .append(Text.builder().append(Text.of(nickname)).color(TextColors.GOLD).build())
+                .append(Text.builder().append(Text.of(" [ ")).color(TextColors.RESET).build())
+                .append(Text.builder().append(Text.of(punished ? "Забанен" : "Не забанен")).color(punished ? TextColors.RED : TextColors.GREEN).build())
+                .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
+                .build());
+
         src.sendMessage(builder.build());
 
         return CommandResult.success();
