@@ -14,7 +14,7 @@ public class CommandRegisterer {
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))),
                         GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))),
-                        GenericArguments.flags().flag("ip").buildWith(GenericArguments.none()))
+                        GenericArguments.flags().flag("i").buildWith(GenericArguments.none()))
                 .executor(new CommandBan())
                 .build();
 
@@ -26,7 +26,7 @@ public class CommandRegisterer {
                         GenericArguments.onlyOne(GenericArguments.integer(Text.of("time"))),
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("unit"))),
                         GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))),
-                        GenericArguments.flags().flag("ip").buildWith(GenericArguments.none()))
+                        GenericArguments.flags().flag("i").buildWith(GenericArguments.none()))
                 .executor(new CommandTempBan())
                 .build();
 

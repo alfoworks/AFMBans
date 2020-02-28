@@ -27,7 +27,7 @@ public class CommandBan extends Command {
 
         InetAddress ip = null;
 
-        if (args.hasAny("ip")) {
+        if (args.hasAny("i")) {
             try {
                 ip = PluginUtils.tryGetAddressForNick(nick);
             } catch (IOException | ApiException e) {
