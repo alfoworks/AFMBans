@@ -10,7 +10,7 @@ import ru.allformine.afmbans.net.api.ban.error.ApiException;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 
-import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class PlayerHistoryListener {
     @Listener
@@ -22,14 +22,11 @@ public class PlayerHistoryListener {
             e.printStackTrace();
         }
 
-        ArrayList<String> nicks = new ArrayList<>();
-
         IpHistoryResponse response;
 
         try {
             response = BanAPI.getIpHistory(null, event.getTargetEntity().getConnection().getAddress().getAddress());
         } catch (Exception e) {
-
             e.printStackTrace();
             if (e instanceof ApiException) {
                 AFMBans.logger.error("API error checking player IPs: " + ((ApiException) e).getBody().toString());
@@ -39,17 +36,12 @@ public class PlayerHistoryListener {
             return;
         }
 
-        for (IpHistoryRecord object : response.items) {
-            String nick = object.nickname;
-            if (!nick.equals(event.getTargetEntity().getName())) {
-                nicks.add(nick);
-            }
-        }
+        response.items = response.items.stream().filter(item -> !item.nickname.equals(event.getTargetEntity().getName())).collect(Collectors.toList());
 
-        if (nicks.size() == 0) {
+        if (response.items.size() == 0) {
             return;
         }
 
-        PluginStatics.getNotifyChannel().send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), nicks));
+        PluginStatics.getNotifyChannel().send(PluginUtils.getPlayerTwinksMessage(event.getTargetEntity().getName(), response.items.stream().map(IpHistoryRecord::toString).collect(Collectors.toList())));
     }
 }

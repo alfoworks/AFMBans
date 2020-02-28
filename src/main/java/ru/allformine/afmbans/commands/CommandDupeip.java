@@ -5,9 +5,9 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
 import ru.allformine.afmbans.AFMBans;
 import ru.allformine.afmbans.PluginMessages;
+import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.error.ApiException;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
@@ -70,15 +70,9 @@ public class CommandDupeip extends Command {
 
         Text.Builder builder = Text.builder();
 
-        builder.append(getReplyText(String.format("Известные аккаунты игрока %s:", nick), TextType.OK));
-
-        response.forEach((nickname, punished) -> builder
+        builder.append(getReplyText(String.format("Известные аккаунты игрока %s:", nick), TextType.OK))
                 .append(Text.of("\n"))
-                .append(Text.builder().append(Text.of(nickname)).color(TextColors.GOLD).build())
-                .append(Text.builder().append(Text.of(" [ ")).color(TextColors.RESET).build())
-                .append(Text.builder().append(Text.of(punished ? "Забанен" : "Не забанен")).color(punished ? TextColors.RED : TextColors.GREEN).build())
-                .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
-                .build());
+                .append(PluginUtils.getDupeIpText(response));
 
         src.sendMessage(builder.build());
 

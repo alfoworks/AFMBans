@@ -35,7 +35,7 @@ public class CommandUnban extends Command {
         }
         if (success) {
             src.sendMessage(getReplyText(PluginMessages.UNBAN_SUCCESSFUL, TextType.OK));
-            PluginUtils.getPunishMessage(src, nickname.get(), ActionType.UNBAN);
+            PluginUtils.getPunishMessage(src, nickname.get(), ActionType.UNBAN, null, null);
         } else {
             src.sendMessage(getReplyText(PluginMessages.PLAYER_NOT_BANNED, TextType.OK));
         }

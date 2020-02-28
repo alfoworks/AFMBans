@@ -53,10 +53,10 @@ public class CommandBan extends Command {
 
         if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
 
-        Sponge.getServer().getPlayer(nick).ifPresent(player -> player.kick(PluginUtils.getBanMessageForPlayer(src.getName(), reason)));
+        Sponge.getServer().getPlayer(nick).ifPresent(player -> player.kick(PluginUtils.getBanMessageForPlayer(src.getName(), reason, null)));
 
         src.sendMessage(getReplyText(PluginMessages.BAN_SUCCESSFUL, TextType.OK));
-        PluginStatics.broadcastChannel.send(PluginUtils.getPunishMessage(src, nick, ActionType.BAN));
+        PluginStatics.broadcastChannel.send(PluginUtils.getPunishMessage(src, nick, ActionType.BAN, reason, null));
 
         return CommandResult.success();
     }

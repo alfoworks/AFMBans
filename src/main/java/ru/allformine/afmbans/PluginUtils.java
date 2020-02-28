@@ -14,14 +14,13 @@ import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
 import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 import ru.allformine.afmbans.time.Duration;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
 public class PluginUtils {
-    public static Text getPunishMessage(CommandSource src, String target, ActionType type) {
+    public static Text getPunishMessage(CommandSource src, String target, ActionType type, @Nullable String reason, @Nullable String pluralizedDuration) {
         String action = "";
 
         switch (type) {
@@ -37,7 +36,6 @@ public class PluginUtils {
             case WARN:
                 action = "выдал предупреждение";
                 break;
-
             case UNBAN:
                 action = "разбанил";
                 break;
@@ -49,27 +47,57 @@ public class PluginUtils {
                 break;
         }
 
-        return Text.builder()
+        String durationString = pluralizedDuration != null ? "на " + pluralizedDuration : "навсегда";
+
+        Text.Builder text = Text.builder()
                 .append(Text.of(src.getName() + " ")).color(PluginStatics.MESSAGE_COLOR)
                 .append(Text.of(action + " "))
                 .append(Text.builder().append(Text.of("игрока ")).color(TextColors.RESET).build())
                 .append(Text.of(target)).color(PluginStatics.MESSAGE_COLOR)
-                .append(type != ActionType.UNBAN && type != ActionType.UNMUTE && type != ActionType.UNWARN ? Text.builder().append(Text.of(" навсегда ")).color(TextColors.RESET).build() : Text.of())
-                .build();
+                .append(type != ActionType.UNBAN && type != ActionType.UNMUTE && type != ActionType.UNWARN ? Text.builder().append(Text.of(String.format(" %s ", durationString))).color(TextColors.RESET).build() : Text.of());
+
+        if (reason != null) {
+            text.append(Text.builder().append(Text.of("по причине ")).color(TextColors.RESET).build())
+                    .append(Text.builder().append(Text.of(String.format("\"%s\"", reason))).color(PluginStatics.MESSAGE_COLOR).build());
+        }
+
+        return text.build();
     }
 
-    public static Text getBanMessageForPlayer(String source, String reason) {
-        return Text.builder()
+    public static Text getDupeIpText(Map<String, Boolean> results) {
+        Text.Builder builder = Text.builder();
+
+        results.forEach((nickname, punished) -> builder
+                .append(Text.builder().append(Text.of(nickname)).color(TextColors.GOLD).build())
+                .append(Text.builder().append(Text.of(" [ ")).color(TextColors.RESET).build())
+                .append(Text.builder().append(Text.of(punished ? "Забанен" : "Не забанен")).color(punished ? TextColors.RED : TextColors.GREEN).build())
+                .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
+                .build());
+
+        return builder.build();
+    }
+
+    public static Text getBanMessageForPlayer(String source, String reason, @Nullable Date date) {
+        Text.Builder text = Text.builder()
                 .append(Text.of("Вам"))
-                .append(Text.builder().append(Text.of(" перманентный ")).color(PluginStatics.BAN_MESSAGE_COLOR).build())
+                .append(Text.builder().append(Text.of(date == null ? " перманентный " : " временный ")).color(PluginStatics.BAN_MESSAGE_COLOR).build())
                 .append(Text.of("бан :3"))
                 .append(Text.of("\n\n"))
                 .append(Text.of("От: "))
                 .append(Text.builder().append(Text.of(source)).color(PluginStatics.BAN_MESSAGE_COLOR).build())
                 .append(Text.of("\n"))
                 .append(Text.of("По причине: "))
-                .append(Text.builder().append(Text.of(reason)).color(PluginStatics.BAN_MESSAGE_COLOR).build())
-                .build();
+                .append(Text.builder().append(Text.of(reason)).color(PluginStatics.BAN_MESSAGE_COLOR).build());
+
+        if (date != null) {
+            text.append(Text.of("\n"));
+            text.append(Text.of("До: "))
+                    .append(Text.builder().append(Text.of(date.toString())).color(PluginStatics.BAN_MESSAGE_COLOR).build());
+        }
+
+        text.append(Text.of("\n\n")).append(PluginStatics.additionalBanMessage);
+
+        return text.build();
     }
 
     public static String getOneLineBanMessageForPlayer(CheckResponse response) {
@@ -78,7 +106,7 @@ public class PluginUtils {
         return String.format("Забанил: %s, по причине: %s", punish.source, punish.reason);
     }
 
-    public static Text getPlayerTwinksMessage(String nickname, ArrayList<String> nicks) {
+    public static Text getPlayerTwinksMessage(String nickname, List<String> nicks) {
         return Text.builder()
                 .append(Text.builder(nickname).color(PluginStatics.MESSAGE_COLOR).build())
                 .append(Text.of(" вошёл в игру. Его остальные аккаунты: "))
@@ -122,16 +150,49 @@ public class PluginUtils {
             case "w":
                 dura = Duration.ofWeeks(time);
                 break;
-            case "M":
+            case "mo":
                 dura = Duration.ofMonths(time);
                 break;
-            case "Y":
+            case "y":
                 dura = Duration.ofYears(time);
                 break;
             default:
                 dura = Duration.ZERO;
         }
+
         return dura;
+    }
+
+    public static String getDuratioPluralized(String unit, int time) {
+        String pluralizedWord;
+
+        switch (unit) {
+            case "s":
+                pluralizedWord = pluralize(time, "секунда", "секунды", "секу1нд");
+                break;
+            case "m":
+                pluralizedWord = pluralize(time, "минута", "минуты", "минут");
+                break;
+            case "h":
+                pluralizedWord = pluralize(time, "час", "часа", "часов");
+                break;
+            case "d":
+                pluralizedWord = pluralize(time, "день", "дня", "дней");
+                break;
+            case "w":
+                pluralizedWord = pluralize(time, "неделю", "недели", "недель");
+                break;
+            case "mo":
+                pluralizedWord = pluralize(time, "месяц", "месяца", "месяцев");
+                break;
+            case "y":
+                pluralizedWord = pluralize(time, "год", "года", "лет");
+                break;
+            default:
+                pluralizedWord = pluralize(time, "хуй", "хуя", "хуёв");
+        }
+
+        return String.format("%s %s", time, pluralizedWord);
     }
 
     public static InetAddress tryGetAddressForNick(final String nick) throws IOException, ApiException {
@@ -149,5 +210,23 @@ public class PluginUtils {
         IpHistoryRecord lastItem = response.items.get(response.items.size() - 1);
 
         return lastItem.ip;
+    }
+
+    // ============================== //
+
+    private static String pluralize(int number, String nomSing, String genSing, String genPl) {
+        String numberString = String.valueOf(number);
+        int lastDigit = Integer.parseInt(numberString.substring(numberString.length() - 1));
+        int lastTwoDigits = numberString.length() > 1 ? Integer.parseInt(numberString.substring(numberString.length() - 2)) : lastDigit;
+
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+            return genPl;
+        } else if (lastDigit == 1) {
+            return nomSing;
+        } else if (lastDigit >= 2 && lastDigit <= 4) {
+            return genSing;
+        } else {
+            return genPl;
+        }
     }
 }

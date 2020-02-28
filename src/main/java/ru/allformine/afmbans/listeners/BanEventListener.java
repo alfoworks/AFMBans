@@ -28,7 +28,7 @@ public class BanEventListener {
             return;
         }
 
-        event.setMessage(PluginUtils.getBanMessageForPlayer(banned.reason.source, banned.reason.reason));
+        event.setMessage(PluginUtils.getBanMessageForPlayer(banned.reason.source, banned.reason.reason, banned.end));
         event.setCancelled(true);
 
         MessageChannel.permission(PluginPermissions.PLAYER_JOIN_NOTIFY).send(Text.of(event.getTargetUser().getName() + " (забанен) попытался войти."));

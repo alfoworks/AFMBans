@@ -27,14 +27,10 @@ public class Command implements CommandExecutor {
         }
 
         return Text.builder()
-                .append(Text.of("AFMBans")).color(color)
-                .append(Text.of(" > ")).color(TextColors.WHITE)
+                .append(Text.builder().append(Text.of("AFMBans")).color(color).build())
+                .append(Text.builder().append(Text.of(" > ")).color(TextColors.RESET).build())
                 .append(Text.of(string))
                 .build();
-    }
-
-    public Text colorText(String string, TextColor color) {
-        return Text.builder().append(Text.of(string)).color(color).build();
     }
 
     public enum TextType {

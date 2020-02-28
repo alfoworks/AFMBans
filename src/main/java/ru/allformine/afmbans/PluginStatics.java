@@ -1,5 +1,6 @@
 package ru.allformine.afmbans;
 
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
@@ -26,4 +27,10 @@ public class PluginStatics {
                 MessageChannel.permission(PluginPermissions.PLAYER_JOIN_NOTIFY),
                 new NotifyChannel());
     }
+
+    public static Text additionalBanMessage = Text.builder()
+            .append(Text.of("Хотите оправдать свой бан?"))
+            .append(Text.of("\nВы можете обратиться к нам: "))
+            .append(Text.builder().append(Text.of("https://mine.alfo.ws/support/")).color(BAN_MESSAGE_COLOR).build())
+            .build();
 }
