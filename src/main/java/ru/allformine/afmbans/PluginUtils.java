@@ -55,7 +55,9 @@ public class PluginUtils {
                 .append(Text.of(target)).color(PluginStatics.MESSAGE_COLOR);
 
         if (ip) {
-            text.append(Text.of(" по IP "));
+            text.append(Text.builder()
+                    .append(Text.of("по")).color(TextColors.RESET).build())
+                    .append(Text.builder().append(Text.of(" IP")).color(PluginStatics.MESSAGE_COLOR).build());
         }
 
         text.append(type != ActionType.UNBAN && type != ActionType.UNMUTE && type != ActionType.UNWARN ? Text.builder().append(Text.of(String.format(" %s ", durationString))).color(TextColors.RESET).build() : Text.of());
