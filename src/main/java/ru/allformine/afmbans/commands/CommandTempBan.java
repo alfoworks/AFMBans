@@ -43,7 +43,7 @@ public class CommandTempBan extends Command {
         }
 
         InetAddress ip = null;
-        if (args.hasAny("i")) {
+        if (args.hasAny("ip")) {
             try {
                 ip = PluginUtils.tryGetAddressForNick(nick.get());
             } catch (IOException | ApiException e) {
@@ -71,9 +71,9 @@ public class CommandTempBan extends Command {
 
         Date end = new Date(System.currentTimeMillis() + durka.getSeconds() * 1000);
 
-        Sponge.getServer().getPlayer(nick.get()).ifPresent(player -> player.kick(PluginUtils.getBanMessageForPlayer(src.getName(), reason, end)));
+        Sponge.getServer().getPlayer(nick.get()).ifPresent(player -> player.kick(PluginUtils.getPunishMessageForPlayer(PunishType.BAN, src.getName(), reason, end)));
 
-        src.sendMessage(getReplyText(PluginMessages.BAN_SUCCESSFUL, TextType.OK));
+        src.sendMessage(getReplyText(ip == null ? PluginMessages.BAN_SUCCESSFUL : PluginMessages.IPBAN_SUCCESSFUL, TextType.OK));
         PluginStatics.broadcastChannel.send(PluginUtils.getPunishMessage(src, nick.get(), ActionType.BAN, reason, PluginUtils.getDuratioPluralized(unit, time.get())));
 
         return CommandResult.success();

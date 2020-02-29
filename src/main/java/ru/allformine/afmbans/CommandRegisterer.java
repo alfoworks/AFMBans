@@ -12,9 +12,9 @@ public class CommandRegisterer {
                 .description(Text.of("Забанить игрока навсегда."))
                 .permission(PluginPermissions.COMMAND_BAN)
                 .arguments(
-                        GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))),
-                        GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))),
-                        GenericArguments.flags().flag("i").buildWith(GenericArguments.none()))
+                        GenericArguments.flags().flag("-ip", "i").buildWith(
+                                GenericArguments.onlyOne(GenericArguments.string(Text.of("player")))
+                        ))
                 .executor(new CommandBan())
                 .build();
 
@@ -26,7 +26,7 @@ public class CommandRegisterer {
                         GenericArguments.onlyOne(GenericArguments.integer(Text.of("time"))),
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("unit"))),
                         GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))),
-                        GenericArguments.flags().flag("i").buildWith(GenericArguments.none()))
+                        GenericArguments.optional(GenericArguments.flags().flag("i", "-ip").buildWith(GenericArguments.none())))
                 .executor(new CommandTempBan())
                 .build();
 
@@ -60,9 +60,19 @@ public class CommandRegisterer {
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("command"))))
                 .build();
 
+        CommandSpec kickSpec = CommandSpec.builder()
+                .description(Text.of("Кикнуть игрока."))
+                .permission(PluginPermissions.COMMAND_KICK)
+                .executor(new CommandKick())
+                .arguments(
+                        GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
+                        GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))))
+                .build();
+
         Sponge.getCommandManager().register(plugin, banSpec, "ban", "afmban");
         Sponge.getCommandManager().register(plugin, tempBanSpec, "tempban", "afmtempban");
         Sponge.getCommandManager().register(plugin, unbanSpec, "unban", "afmunban");
+        Sponge.getCommandManager().register(plugin, kickSpec, "kick", "afmkick");
         Sponge.getCommandManager().register(plugin, dupeipSpec, "dupeip");
         Sponge.getCommandManager().register(plugin, debugModeSpec, "afmbansdebug", "debugmode", "dm", "afmdm");
         Sponge.getCommandManager().register(plugin, debugSpec, "debug", "dbg", "d", "afmd");

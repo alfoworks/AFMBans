@@ -27,7 +27,7 @@ public class CommandBan extends Command {
 
         InetAddress ip = null;
 
-        if (args.hasAny("i")) {
+        if (args.hasAny("ip")) {
             try {
                 ip = PluginUtils.tryGetAddressForNick(nick);
             } catch (IOException | ApiException e) {
@@ -53,10 +53,10 @@ public class CommandBan extends Command {
 
         if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
 
-        Sponge.getServer().getPlayer(nick).ifPresent(player -> player.kick(PluginUtils.getBanMessageForPlayer(src.getName(), reason, null)));
-
-        src.sendMessage(getReplyText(PluginMessages.BAN_SUCCESSFUL, TextType.OK));
+        Sponge.getServer().getPlayer(nick).ifPresent(player -> player.kick(PluginUtils.getPunishMessageForPlayer(PunishType.BAN, src.getName(), reason, null)));
         PluginStatics.broadcastChannel.send(PluginUtils.getPunishMessage(src, nick, ActionType.BAN, reason, null));
+
+        src.sendMessage(getReplyText(ip == null ? PluginMessages.BAN_SUCCESSFUL : PluginMessages.IPBAN_SUCCESSFUL, TextType.OK));
 
         return CommandResult.success();
     }

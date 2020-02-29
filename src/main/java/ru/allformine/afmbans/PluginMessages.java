@@ -5,6 +5,8 @@ public class PluginMessages {
     public static String API_ERROR = "Произошла ошибка API.";
 
     public static String BAN_SUCCESSFUL = "Игрок был успешно забанен.";
+    public static String IPBAN_SUCCESSFUL = "Игрок был успешно забанен по IP";
+    public static String KICK_SUCCESSFUL = "Игрок был успешно кикнут.";
     public static String UNBAN_SUCCESSFUL = "Игрок был успешно разбанен.";
     public static String PLAYER_NOT_BANNED = "Игрок не забанен!";
     public static String PLAYER_UNKNOWN = "Игрок неизвестен.";

@@ -7,6 +7,7 @@ import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
+import ru.allformine.afmbans.net.api.ban.PunishType;
 import ru.allformine.afmbans.net.api.ban.error.ApiException;
 import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
@@ -77,12 +78,22 @@ public class PluginUtils {
         return builder.build();
     }
 
-    public static Text getBanMessageForPlayer(String source, String reason, @Nullable Date date) {
+    public static Text getPunishMessageForPlayer(PunishType type, String source, String reason, @Nullable Date date) {
+        if (type != PunishType.KICK && type != PunishType.BAN) {
+            throw new IllegalArgumentException();
+        }
+
         Text.Builder text = Text.builder()
-                .append(Text.of("Вам"))
-                .append(Text.builder().append(Text.of(date == null ? " перманентный " : " временный ")).color(PluginStatics.BAN_MESSAGE_COLOR).build())
-                .append(Text.of("бан :3"))
-                .append(Text.of("\n\n"))
+                .append(Text.of("Вам "));
+
+        if (type == PunishType.BAN) {
+            text.append(Text.builder().append(Text.of(date == null ? "перманентный " : "временный ")).color(PluginStatics.BAN_MESSAGE_COLOR).build())
+                    .append(Text.of("бан :3"));
+        } else {
+            text.append(Text.builder().append(Text.of("кик :3")).color(PluginStatics.BAN_MESSAGE_COLOR).build());
+        }
+
+        text.append(Text.of("\n\n"))
                 .append(Text.of("От: "))
                 .append(Text.builder().append(Text.of(source)).color(PluginStatics.BAN_MESSAGE_COLOR).build())
                 .append(Text.of("\n"))
@@ -95,7 +106,7 @@ public class PluginUtils {
                     .append(Text.builder().append(Text.of(date.toString())).color(PluginStatics.BAN_MESSAGE_COLOR).build());
         }
 
-        text.append(Text.of("\n\n")).append(PluginStatics.additionalBanMessage);
+        if (type != PunishType.KICK) text.append(Text.of("\n\n")).append(PluginStatics.additionalBanMessage);
 
         return text.build();
     }
