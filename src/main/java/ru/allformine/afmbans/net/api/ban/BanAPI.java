@@ -2,7 +2,6 @@ package ru.allformine.afmbans.net.api.ban;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sun.istack.internal.Nullable;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.PluginUtils;
@@ -14,6 +13,7 @@ import ru.allformine.afmbans.net.api.ban.response.HistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 import ru.allformine.afmbans.time.Duration;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;

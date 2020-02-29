@@ -65,7 +65,7 @@ public class CommandDupeip extends Command {
         response = response.entrySet().stream().filter(x -> !x.getKey().equalsIgnoreCase(nick)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         if (response.size() < 1) {
-            throw new CommandException(getReplyText("У этого игрока нет дополнительных аккаунтов.", TextType.ERROR));
+            throw new CommandException(getReplyText(PluginMessages.PLAYER_HAS_NO_ADDITIONAL_ACCOUNTS, TextType.ERROR));
         }
 
         Text.Builder builder = Text.builder();

@@ -47,11 +47,11 @@ public class CommandTempBan extends Command {
             try {
                 ip = PluginUtils.tryGetAddressForNick(nick.get());
             } catch (IOException | ApiException e) {
-                throw new CommandException(getReplyText("Произошла ошибка при попытке получения IP игрока.", TextType.ERROR));
+                throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
             }
 
             if (ip == null) {
-                throw new CommandException(getReplyText("IP этого игрока не найден.", TextType.ERROR));
+                throw new CommandException(getReplyText(PluginMessages.PLAYER_IP_NOT_FOUND, TextType.ERROR));
             }
         }
 
@@ -73,7 +73,7 @@ public class CommandTempBan extends Command {
 
         Sponge.getServer().getPlayer(nick.get()).ifPresent(player -> player.kick(PluginUtils.getPunishMessageForPlayer(PunishType.BAN, src.getName(), reason, end)));
 
-        src.sendMessage(getReplyText(ip == null ? PluginMessages.BAN_SUCCESSFUL : PluginMessages.IPBAN_SUCCESSFUL, TextType.OK));
+        src.sendMessage(getReplyText(ip == null ? PluginMessages.TEMPBAN_SUCCESSFUL : PluginMessages.IPTEMPBAN_SUCCESSFUL, TextType.OK));
         PluginStatics.broadcastChannel.send(PluginUtils.getPunishMessage(src, nick.get(), ActionType.BAN, reason, PluginUtils.getDuratioPluralized(unit, time.get())));
 
         return CommandResult.success();

@@ -1,9 +1,10 @@
-package ru.allformine.afmbans;
+package ru.allformine.afmbans.commands.registering;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
+import ru.allformine.afmbans.PluginPermissions;
 import ru.allformine.afmbans.commands.*;
 
 public class CommandRegisterer {
@@ -12,9 +13,10 @@ public class CommandRegisterer {
                 .description(Text.of("Забанить игрока навсегда."))
                 .permission(PluginPermissions.COMMAND_BAN)
                 .arguments(
-                        GenericArguments.flags().flag("-ip", "i").buildWith(
-                                GenericArguments.onlyOne(GenericArguments.string(Text.of("player")))
-                        ))
+                        Parameters.IP_FLAG.buildWith(GenericArguments.seq(
+                                Parameters.PLAYER_AS_STRING,
+                                Parameters.OPTIONAL_REASON
+                        )))
                 .executor(new CommandBan())
                 .build();
 
@@ -22,11 +24,11 @@ public class CommandRegisterer {
                 .description(Text.of("Временно забанить игрока."))
                 .permission(PluginPermissions.COMMAND_TEMP_BAN)
                 .arguments(
-                        GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))),
-                        GenericArguments.onlyOne(GenericArguments.integer(Text.of("time"))),
-                        GenericArguments.onlyOne(GenericArguments.string(Text.of("unit"))),
-                        GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))),
-                        GenericArguments.optional(GenericArguments.flags().flag("i", "-ip").buildWith(GenericArguments.none())))
+                        Parameters.IP_FLAG.buildWith(GenericArguments.seq(
+                                Parameters.PLAYER_AS_STRING,
+                                Parameters.TIME_COUNT,
+                                Parameters.TIME_UNIT,
+                                Parameters.OPTIONAL_REASON)))
                 .executor(new CommandTempBan())
                 .build();
 
@@ -34,7 +36,7 @@ public class CommandRegisterer {
                 .description(Text.of("Разбанить игрока."))
                 .permission(PluginPermissions.COMMAND_UNBAN)
                 .arguments(
-                        GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
+                        Parameters.PLAYER_AS_STRING)
                 .executor(new CommandUnban())
                 .build();
 
@@ -42,8 +44,8 @@ public class CommandRegisterer {
                 .description(Text.of("Проверить все IP игрока и его наказания."))
                 .permission(PluginPermissions.COMMAND_DUPEIP)
                 .arguments(
-                        GenericArguments.optional(GenericArguments.string(Text.of("player"))),
-                        GenericArguments.optional(GenericArguments.ip(Text.of("ip"))))
+                        Parameters.OPTIONAL_PLAYER,
+                        Parameters.OPTIONAL_IP)
                 .executor(new CommandDupeip())
                 .build();
 
@@ -65,8 +67,8 @@ public class CommandRegisterer {
                 .permission(PluginPermissions.COMMAND_KICK)
                 .executor(new CommandKick())
                 .arguments(
-                        GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
-                        GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("reason"))))
+                        Parameters.PLAYER,
+                        Parameters.OPTIONAL_REASON)
                 .build();
 
         Sponge.getCommandManager().register(plugin, banSpec, "ban", "afmban");

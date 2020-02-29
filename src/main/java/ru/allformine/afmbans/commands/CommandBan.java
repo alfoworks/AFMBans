@@ -31,11 +31,11 @@ public class CommandBan extends Command {
             try {
                 ip = PluginUtils.tryGetAddressForNick(nick);
             } catch (IOException | ApiException e) {
-                throw new CommandException(getReplyText("Произошла ошибка при попытке получения IP игрока.", TextType.ERROR));
+                throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
             }
 
             if (ip == null) {
-                throw new CommandException(getReplyText("IP этого игрока не найден.", TextType.ERROR));
+                throw new CommandException(getReplyText(PluginMessages.PLAYER_IP_NOT_FOUND, TextType.ERROR));
             }
         }
 
