@@ -1,9 +1,8 @@
 package ru.allformine.afmbans.net.api.ban;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
+import com.sun.istack.internal.Nullable;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import ru.allformine.afmbans.PluginUtils;
@@ -15,9 +14,7 @@ import ru.allformine.afmbans.net.api.ban.response.HistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 import ru.allformine.afmbans.time.Duration;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.InetAddress;
 import java.net.URL;
 import java.text.ParseException;
@@ -100,9 +97,8 @@ public class BanAPI {
         if (type == PunishType.BAN && address != null) {
             json.addProperty("ip", address.getHostAddress());
         }
-        JsonObject res = makeRequest("check", json);
 
-        return new CheckResponse(res);
+        return new CheckResponse(makeRequest("check", json));
     }
 
     @Deprecated
@@ -144,13 +140,14 @@ public class BanAPI {
         for (String nickname : nicknames) players.add(nickname);
         json.add("players", players);
         JsonObject jsonResponse = makeRequest("massbancheck", json);
-        Type listType = new TypeToken<List<Boolean>>() {
-        }.getType();
-        List<Boolean> bannedList = new Gson().fromJson(jsonResponse.get("items").getAsJsonArray(), listType);
+//        Type listType = new TypeToken<List<Boolean>>() {
+//        }.getType();
+//        //List<Boolean> bannedList = new Gson().fromJson(jsonResponse.get("items").getAsJsonArray(), listType);
+        JsonArray bannedList = jsonResponse.get("items").getAsJsonArray();
         HashMap<String, Boolean> response = new HashMap<>();
         for (int i = 0, nicknamesSize = nicknames.size(); i < nicknamesSize; i++) {
             String nickname = nicknames.get(i);
-            Boolean banned = bannedList.get(i);
+            Boolean banned = bannedList.get(i).getAsBoolean();
             response.put(nickname, banned);
         }
         return response;
