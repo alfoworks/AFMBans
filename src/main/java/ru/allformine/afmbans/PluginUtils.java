@@ -56,7 +56,7 @@ public class PluginUtils {
 
         if (ip) {
             text.append(Text.builder()
-                    .append(Text.of("по")).color(TextColors.RESET).build())
+                    .append(Text.of(" по")).color(TextColors.RESET).build())
                     .append(Text.builder().append(Text.of(" IP")).color(PluginStatics.MESSAGE_COLOR).build());
         }
 
