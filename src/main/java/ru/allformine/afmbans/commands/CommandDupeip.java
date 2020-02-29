@@ -36,7 +36,7 @@ public class CommandDupeip extends Command {
         if (!protoNick.isPresent())
             throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
 
-        String nick = protoNick.get();
+        String nick = PluginUtils.getTrueNickCase(protoNick.get());
         IpHistoryResponse ipHistoryResponse;
         Map<String, Boolean> response;
 

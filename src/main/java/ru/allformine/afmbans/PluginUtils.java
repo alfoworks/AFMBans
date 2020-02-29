@@ -16,6 +16,7 @@ import ru.allformine.afmbans.time.Duration;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.text.ParseException;
 import java.util.*;
 
 public class PluginUtils {
@@ -137,11 +138,25 @@ public class PluginUtils {
     }
 
     public static String getTrueNickCase(String nickname) {
+        /* Сначала чекаем локально, поможет лишний раз не обращаться к API */
+
         Optional<UserStorageService> userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
 
         if (userStorage.isPresent() && userStorage.get().get(nickname).isPresent()) {
             return userStorage.get().get(nickname).get().getName();
         }
+
+        /* В таком случае можно уже и у базы узнать */
+
+        BanAPI banApi = new BanAPI(nickname);
+        try {
+            return banApi.check(PunishType.BAN, null).target;
+        } catch (IOException | ParseException | ApiException e) {
+            AFMBans.logger.error("API error occurred when was trying to get true nick case:");
+            e.printStackTrace();
+        }
+
+        /* Не нашло, тогда возвращаем то, в чем указали */
 
         return nickname;
     }
@@ -186,7 +201,7 @@ public class PluginUtils {
 
         switch (unit) {
             case "s":
-                pluralizedWord = pluralize(time, "секунда", "секунды", "секу1нд");
+                pluralizedWord = pluralize(time, "секунда", "секунды", "секунд");
                 break;
             case "m":
                 pluralizedWord = pluralize(time, "минута", "минуты", "минут");

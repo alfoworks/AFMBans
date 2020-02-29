@@ -23,9 +23,11 @@ import java.util.Optional;
 public class CommandTempBan extends Command {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        Optional<String> nick = args.getOne("player");
-        if (!nick.isPresent())
+        Optional<String> protoNick = args.getOne("player");
+        if (!protoNick.isPresent())
             throw new CommandException(getReplyText(PluginMessages.NOT_ENOUGH_ARGUMENTS, TextType.ERROR));
+
+        String nick = PluginUtils.getTrueNickCase(protoNick.get());
 
         Optional<Integer> time = args.getOne("time");
         Optional<String> protoUnit = args.getOne("unit");
@@ -45,7 +47,7 @@ public class CommandTempBan extends Command {
         InetAddress ip = null;
         if (args.hasAny("ip")) {
             try {
-                ip = PluginUtils.tryGetAddressForNick(nick.get());
+                ip = PluginUtils.tryGetAddressForNick(nick);
             } catch (IOException | ApiException e) {
                 throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
             }
@@ -57,7 +59,7 @@ public class CommandTempBan extends Command {
 
         String reason = args.<String>getOne("reason").orElse(PluginStatics.DEFAULT_REASON);
         Duration durka = PluginUtils.getDuration(unit, time.get());
-        BanAPI banApi = new BanAPI(nick.get());
+        BanAPI banApi = new BanAPI(nick);
 
         boolean ok;
 
@@ -71,10 +73,10 @@ public class CommandTempBan extends Command {
 
         Date end = new Date(System.currentTimeMillis() + durka.getSeconds() * 1000);
 
-        Sponge.getServer().getPlayer(nick.get()).ifPresent(player -> player.kick(PluginUtils.getPunishMessageForPlayer(PunishType.BAN, src.getName(), reason, end)));
+        Sponge.getServer().getPlayer(nick).ifPresent(player -> player.kick(PluginUtils.getPunishMessageForPlayer(PunishType.BAN, src.getName(), reason, end)));
 
         src.sendMessage(getReplyText(ip == null ? PluginMessages.TEMPBAN_SUCCESSFUL : PluginMessages.IPTEMPBAN_SUCCESSFUL, TextType.OK));
-        PluginStatics.broadcastChannel.send(PluginUtils.getBroadcastPunishMessage(src, nick.get(), ActionType.BAN, reason, PluginUtils.getDuratioPluralized(unit, time.get()), ip != null));
+        PluginStatics.broadcastChannel.send(PluginUtils.getBroadcastPunishMessage(src, nick, ActionType.BAN, reason, PluginUtils.getDuratioPluralized(unit, time.get()), ip != null));
 
         return CommandResult.success();
     }
