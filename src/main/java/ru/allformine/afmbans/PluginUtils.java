@@ -9,10 +9,8 @@ import org.spongepowered.api.text.format.TextColors;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
 import ru.allformine.afmbans.net.api.ban.error.ApiException;
-import ru.allformine.afmbans.net.api.ban.response.CheckResponse;
 import ru.allformine.afmbans.net.api.ban.response.IpHistoryResponse;
 import ru.allformine.afmbans.net.api.ban.response.object.IpHistoryRecord;
-import ru.allformine.afmbans.net.api.ban.response.object.Punish;
 import ru.allformine.afmbans.time.Duration;
 
 import javax.annotation.Nullable;
@@ -21,7 +19,7 @@ import java.net.InetAddress;
 import java.util.*;
 
 public class PluginUtils {
-    public static Text getPunishMessage(CommandSource src, String target, ActionType type, @Nullable String reason, @Nullable String pluralizedDuration) {
+    public static Text getBroadcastPunishMessage(CommandSource src, String target, ActionType type, @Nullable String reason, @Nullable String pluralizedDuration, boolean ip) {
         String action = "";
 
         switch (type) {
@@ -54,8 +52,13 @@ public class PluginUtils {
                 .append(Text.of(src.getName() + " ")).color(PluginStatics.MESSAGE_COLOR)
                 .append(Text.of(action + " "))
                 .append(Text.builder().append(Text.of("игрока ")).color(TextColors.RESET).build())
-                .append(Text.of(target)).color(PluginStatics.MESSAGE_COLOR)
-                .append(type != ActionType.UNBAN && type != ActionType.UNMUTE && type != ActionType.UNWARN ? Text.builder().append(Text.of(String.format(" %s ", durationString))).color(TextColors.RESET).build() : Text.of());
+                .append(Text.of(target)).color(PluginStatics.MESSAGE_COLOR);
+
+        if (ip) {
+            text.append(Text.of(" по IP "));
+        }
+
+        text.append(type != ActionType.UNBAN && type != ActionType.UNMUTE && type != ActionType.UNWARN ? Text.builder().append(Text.of(String.format(" %s ", durationString))).color(TextColors.RESET).build() : Text.of());
 
         if (reason != null) {
             text.append(Text.builder().append(Text.of("по причине ")).color(TextColors.RESET).build())
@@ -111,11 +114,13 @@ public class PluginUtils {
         return text.build();
     }
 
+    /* Пока не нужно
     public static String getOneLineBanMessageForPlayer(CheckResponse response) {
         Punish punish = response.reason;
 
         return String.format("Забанил: %s, по причине: %s", punish.source, punish.reason);
     }
+     */
 
     public static Text getPlayerTwinksMessage(String nickname, List<String> nicks) {
         return Text.builder()

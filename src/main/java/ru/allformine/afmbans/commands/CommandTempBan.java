@@ -74,7 +74,7 @@ public class CommandTempBan extends Command {
         Sponge.getServer().getPlayer(nick.get()).ifPresent(player -> player.kick(PluginUtils.getPunishMessageForPlayer(PunishType.BAN, src.getName(), reason, end)));
 
         src.sendMessage(getReplyText(ip == null ? PluginMessages.TEMPBAN_SUCCESSFUL : PluginMessages.IPTEMPBAN_SUCCESSFUL, TextType.OK));
-        PluginStatics.broadcastChannel.send(PluginUtils.getPunishMessage(src, nick.get(), ActionType.BAN, reason, PluginUtils.getDuratioPluralized(unit, time.get())));
+        PluginStatics.broadcastChannel.send(PluginUtils.getBroadcastPunishMessage(src, nick.get(), ActionType.BAN, reason, PluginUtils.getDuratioPluralized(unit, time.get()), ip != null));
 
         return CommandResult.success();
     }

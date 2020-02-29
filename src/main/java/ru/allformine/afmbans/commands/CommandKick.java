@@ -34,7 +34,7 @@ public class CommandKick extends Command {
         if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
 
         player.kick(PluginUtils.getPunishMessageForPlayer(PunishType.KICK, src.getName(), reason, null));
-        PluginStatics.broadcastChannel.send(PluginUtils.getPunishMessage(src, player.getName(), ActionType.KICK, reason, null));
+        PluginStatics.broadcastChannel.send(PluginUtils.getBroadcastPunishMessage(src, player.getName(), ActionType.KICK, reason, null, false));
 
         src.sendMessage(getReplyText(PluginMessages.KICK_SUCCESSFUL, TextType.OK));
 
