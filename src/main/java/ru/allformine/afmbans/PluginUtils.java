@@ -245,6 +245,10 @@ public class PluginUtils {
         return lastItem.ip;
     }
 
+    public static boolean isPlayerMuted(Player player) { // Ищет во внутреннем кеше, в муте игрок или нет.
+        return MuteInfoTask.mutedPlayers.contains(player);
+    }
+
     // ============================== //
 
     private static String pluralize(int number, String nomSing, String genSing, String genPl) {

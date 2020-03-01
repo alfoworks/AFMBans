@@ -11,6 +11,10 @@ public class PluginMessages {
     public static String PLAYER_IP_NOT_FOUND = "IP игрока не найден.";
     public static String KICK_SUCCESSFUL = "Игрок был успешно кикнут.";
     public static String UNBAN_SUCCESSFUL = "Игрок был успешно разбанен.";
+    public static String MUTE_SUCCESSFUL = "Игроку был успешно выдан мут.";
+    public static String IPMUTE_SUCCESSFUL = "Игроку был успешно выдан мут по IP.";
+    public static String TEMPMUTE_SUCESSFUL = "Игроку был успешно выдан временный мут.";
+    public static String IPTEMPMUTE_SUCCESSFUL = "Игроку был успешно выдан временный мут по IP.";
     public static String PLAYER_NOT_BANNED = "Игрок не забанен!";
     public static String PLAYER_UNKNOWN = "Игрок неизвестен.";
     public static String PLAYER_HAS_NO_ADDITIONAL_ACCOUNTS = "У игрока нет еще известных аккаунтов.";
