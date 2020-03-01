@@ -29,4 +29,8 @@ public class ApiException extends Exception {
         return this.body;
     }
 
+    @Override
+    public String getMessage() {
+        return String.format("%s: %s", getErrorCode(), getDescription());
+    }
 }

@@ -49,17 +49,12 @@ public class CommandRegisterer {
                 .executor(new CommandDupeip())
                 .build();
 
-        CommandSpec debugModeSpec = CommandSpec.builder()
-                .description(Text.of("Переключить режим отладки."))
-                .permission(PluginPermissions.COMMAND_DEBUG_MODE)
-                .executor(new CommandDebugMode())
-                .build();
-
         CommandSpec debugSpec = CommandSpec.builder()
-                .description(Text.of("Отъебись"))
+                .description(Text.of("Дебаг плагина"))
                 .permission(PluginPermissions.COMMAND_DEBUG)
                 .executor(new CommandDebug())
-                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("command"))))
+                .child(new CommandDebugMethod(), "method")
+                .child(new CommandDebugRequests(), "requests")
                 .build();
 
         CommandSpec kickSpec = CommandSpec.builder()
@@ -76,7 +71,6 @@ public class CommandRegisterer {
         Sponge.getCommandManager().register(plugin, unbanSpec, "unban", "afmunban");
         Sponge.getCommandManager().register(plugin, kickSpec, "kick", "afmkick");
         Sponge.getCommandManager().register(plugin, dupeipSpec, "dupeip");
-        Sponge.getCommandManager().register(plugin, debugModeSpec, "afmbansdebug", "debugmode", "dm", "afmdm");
         Sponge.getCommandManager().register(plugin, debugSpec, "debug", "dbg", "d", "afmd");
     }
 }

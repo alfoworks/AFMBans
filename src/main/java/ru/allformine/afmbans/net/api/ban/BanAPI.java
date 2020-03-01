@@ -34,7 +34,7 @@ public class BanAPI {
         this.nickname = player.getName();
     }
 
-    private static JsonObject makeRequest(String method, JsonObject json) throws IOException, ApiException {
+    public static JsonObject makeRequest(String method, JsonObject json) throws IOException, ApiException {
         PluginUtils.debug("Sending JSON: \"" + json.toString() + "\" using method \"" + method + "\"");
         JsonRequest req = new JsonRequest(
                 new URL(
