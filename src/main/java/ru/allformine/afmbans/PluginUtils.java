@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PluginUtils {
     public static Text getBroadcastPunishMessage(CommandSource src, String target, ActionType type, @Nullable String reason, @Nullable String pluralizedDuration, boolean ip) {
@@ -71,15 +72,39 @@ public class PluginUtils {
         return text.build();
     }
 
+    public static void sendMuteMessage(Player player) { //FIXME: добавить больше инфы
+        player.sendMessage(Text.builder().append(Text.of("Вас замутили!")).color(TextColors.RED).build());
+    }
+
     public static Text getDupeIpText(Map<String, Boolean> results) {
         Text.Builder builder = Text.builder();
 
-        results.forEach((nickname, punished) -> builder
-                .append(Text.builder().append(Text.of(nickname)).color(TextColors.GOLD).build())
-                .append(Text.builder().append(Text.of(" [ ")).color(TextColors.RESET).build())
-                .append(Text.builder().append(Text.of(punished ? "Забанен" : "Не забанен")).color(punished ? TextColors.RED : TextColors.GREEN).build())
-                .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
-                .build());
+        results.forEach((nickname, punished) -> {
+            boolean isMuted;
+
+            /*
+            В данном случае нет обращения к кешу, т.к. запрос не интервальный
+             */
+
+            BanAPI api = new BanAPI(nickname);
+            try {
+                isMuted = api.check(PunishType.MUTE, null).punished;
+            } catch (Exception e) {
+                AFMBans.logger.error(String.format("Failed to check %s mute while generating DupeIP output!!!", nickname));
+                e.printStackTrace();
+                return;
+            }
+
+            builder
+                    .append(Text.builder().append(Text.of(nickname)).color(TextColors.GOLD).build())
+                    .append(Text.builder().append(Text.of(" [ ")).color(TextColors.RESET).build())
+                    .append(Text.builder().append(Text.of(punished ? "Забанен" : "Не забанен")).color(punished ? TextColors.RED : TextColors.GREEN).build())
+                    .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
+                    .append(Text.builder().append(Text.of(" [")).build())
+                    .append(Text.builder().append(Text.of(isMuted ? "В муте" : "Не в муте")).color(isMuted ? TextColors.RED : TextColors.GREEN).build())
+                    .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
+                    .build();
+        });
 
         return builder.build();
     }
@@ -129,7 +154,7 @@ public class PluginUtils {
         return Text.builder()
                 .append(Text.builder(nickname).color(PluginStatics.MESSAGE_COLOR).build())
                 .append(Text.of(" вошёл в игру. Его остальные аккаунты: "))
-                .append(Text.builder().append(Text.of(String.join("\n - ", nicks))).color(PluginStatics.MESSAGE_COLOR).build())
+                .append(Text.builder().append(Text.of(join(nicks, "\n -"))).color(PluginStatics.MESSAGE_COLOR).build())
                 .build();
     }
 
@@ -245,8 +270,8 @@ public class PluginUtils {
         return lastItem.ip;
     }
 
-    public static boolean isPlayerMuted(Player player) { // Ищет во внутреннем кеше, в муте игрок или нет.
-        return MuteInfoTask.mutedPlayers.contains(player);
+    public static String join(Collection<String> collection, String symbol) {
+        return collection.stream().collect(Collectors.joining(symbol, symbol, symbol));
     }
 
     // ============================== //
