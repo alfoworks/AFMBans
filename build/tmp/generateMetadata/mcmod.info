@@ -1,0 +1,14 @@
+[
+    {
+        "modid": "afmbans",
+        "name": "AFMBans",
+        "version": "0.1-BETA",
+        "description": "Кастомные баны",
+        "dependencies": [
+            "spongeapi@7.2.0"
+        ],
+        "requiredMods": [
+            "spongeapi@7.2.0"
+        ]
+    }
+]

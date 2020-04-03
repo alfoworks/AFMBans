@@ -14,6 +14,7 @@ import ru.allformine.afmbans.time.Duration;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Optional;
 
 public class CommandTempMute extends Command {
@@ -67,7 +68,9 @@ public class CommandTempMute extends Command {
 
         if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
 
-        Sponge.getServer().getPlayer(nick).ifPresent(player -> MuteCache.setPlayerMuted(player, true));
+        Date end = new Date(System.currentTimeMillis() + durka.getSeconds() * 1000);
+
+        Sponge.getServer().getPlayer(nick).ifPresent(player -> MuteCache.setPlayerMuted(player, true, end));
 
         src.sendMessage(getReplyText(ip == null ? PluginMessages.TEMPMUTE_SUCESSFUL : PluginMessages.IPTEMPMUTE_SUCCESSFUL, TextType.OK));
         PluginStatics.broadcastChannel.send(PluginUtils.getBroadcastPunishMessage(src, nick, ActionType.MUTE, reason, PluginUtils.getDuratioPluralized(unit, time.get()), ip != null));

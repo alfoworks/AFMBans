@@ -2,12 +2,12 @@ package ru.allformine.afmbans;
 
 import org.spongepowered.api.entity.living.player.Player;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class MuteCache {
     public static final Set<Player> mutedPlayers = Collections.synchronizedSet(new HashSet<>());
+    public static final Map<Player, Date> mutedPlayersDates = Collections.synchronizedMap(new HashMap<>());
 
     public static boolean isPlayerMuted(Player player) {
         boolean muted;
@@ -19,12 +19,18 @@ public class MuteCache {
         return muted;
     }
 
-    public static void setPlayerMuted(Player player, boolean isMuted) {
+    public static Date getPlayerMuteDeadline(Player player) {
+        return mutedPlayersDates.get(player);
+    }
+
+    public static void setPlayerMuted(Player player, boolean isMuted, @Nullable Date date) {
         synchronized (mutedPlayers) {
             if (isMuted) {
                 mutedPlayers.add(player);
+                if (date != null) mutedPlayersDates.put(player, date);
             } else {
                 mutedPlayers.remove(player);
+                mutedPlayersDates.remove(player);
             }
         }
     }

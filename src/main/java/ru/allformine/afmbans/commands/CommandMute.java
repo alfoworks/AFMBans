@@ -50,7 +50,7 @@ public class CommandMute extends Command {
 
         if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
 
-        Sponge.getServer().getPlayer(nick).ifPresent(player -> MuteCache.setPlayerMuted(player, true));
+        Sponge.getServer().getPlayer(nick).ifPresent(player -> MuteCache.setPlayerMuted(player, true, null));
 
         PluginStatics.broadcastChannel.send(PluginUtils.getBroadcastPunishMessage(src, nick, ActionType.MUTE, reason, null, ip != null));
 

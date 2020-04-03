@@ -47,7 +47,7 @@ public class CommandUnmute extends Command {
             src.sendMessage(getReplyText(PluginMessages.PLAYER_NOT_MUTED, TextType.OK));
         }
 
-        Sponge.getServer().getPlayer(nickname.get()).ifPresent(player -> MuteCache.setPlayerMuted(player, false));
+        Sponge.getServer().getPlayer(nickname.get()).ifPresent(player -> MuteCache.setPlayerMuted(player, false, null));
 
         return CommandResult.success();
     }

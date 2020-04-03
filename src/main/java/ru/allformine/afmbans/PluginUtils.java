@@ -72,8 +72,15 @@ public class PluginUtils {
         return text.build();
     }
 
-    public static void sendMuteMessage(Player player) { //FIXME: добавить больше инфы
-        player.sendMessage(Text.builder().append(Text.of("Вас замутили!")).color(TextColors.RED).build());
+    public static void sendMuteMessage(Player player) {
+        StringBuilder message = new StringBuilder();
+        Date deadline = MuteCache.getPlayerMuteDeadline(player);
+
+        message.append("Вы не можете отправлять сообщения, т.к. вы находитесь в ");
+        message.append(deadline == null ? "перманентном муте" : "муте до " + deadline.toString());
+        message.append("!");
+
+        player.sendMessage(Text.builder().append(Text.of(message.toString())).color(TextColors.RED).build());
     }
 
     public static Text getDupeIpText(Map<String, Boolean> results) {
@@ -100,7 +107,7 @@ public class PluginUtils {
                     .append(Text.builder().append(Text.of(" [ ")).color(TextColors.RESET).build())
                     .append(Text.builder().append(Text.of(punished ? "Забанен" : "Не забанен")).color(punished ? TextColors.RED : TextColors.GREEN).build())
                     .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
-                    .append(Text.builder().append(Text.of(" [")).build())
+                    .append(Text.builder().append(Text.of(" [ ")).build())
                     .append(Text.builder().append(Text.of(isMuted ? "В муте" : "Не в муте")).color(isMuted ? TextColors.RED : TextColors.GREEN).build())
                     .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
                     .build();
