@@ -4,8 +4,10 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.command.SendCommandEvent;
+import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.message.MessageChannelEvent;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 import ru.allformine.afmbans.MuteCache;
 import ru.allformine.afmbans.PluginStatics;
 import ru.allformine.afmbans.PluginUtils;
@@ -25,5 +27,10 @@ public class MuteListener {
             event.setCancelled(true);
             PluginUtils.sendMuteMessage(player);
         }
+    }
+
+    @Listener
+    public void onJoin(ClientConnectionEvent.Join event, @Getter("getTargetEntity") Player player) {
+        MuteCache.updatePlayerMute(player);
     }
 }

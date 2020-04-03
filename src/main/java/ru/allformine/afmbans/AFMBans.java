@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 
 @Plugin(id = "afmbans", name = "AFMBans", description = "Кастомные баны")
 public class AFMBans {
+    public static AFMBans instance;
+
     @Inject
     public static Logger logger;
 
@@ -33,6 +35,8 @@ public class AFMBans {
 
     @Listener
     public void preInit(GamePreInitializationEvent event) {
+        instance = this;
+
         Sponge.getEventManager().registerListeners(this, new BanEventListener());
         Sponge.getEventManager().registerListeners(this, new PlayerHistoryListener());
         Sponge.getEventManager().registerListeners(this, new MuteListener());
