@@ -5,10 +5,7 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import ru.allformine.afmbans.ActionType;
-import ru.allformine.afmbans.PluginMessages;
-import ru.allformine.afmbans.PluginStatics;
-import ru.allformine.afmbans.PluginUtils;
+import ru.allformine.afmbans.*;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
 import ru.allformine.afmbans.net.api.ban.PunishType;
 import ru.allformine.afmbans.net.api.ban.error.ApiException;
@@ -53,10 +50,11 @@ public class CommandMute extends Command {
 
         if (!ok) throw new CommandException(getReplyText(PluginMessages.API_ERROR, TextType.ERROR));
 
-        Sponge.getServer().getPlayer(nick).ifPresent(player -> player.kick(PluginUtils.getPunishMessageForPlayer(PunishType.BAN, src.getName(), reason, null)));
-        PluginStatics.broadcastChannel.send(PluginUtils.getBroadcastPunishMessage(src, nick, ActionType.BAN, reason, null, ip != null));
+        Sponge.getServer().getPlayer(nick).ifPresent(player -> MuteCache.setPlayerMuted(player, true));
 
-        src.sendMessage(getReplyText(ip == null ? PluginMessages.BAN_SUCCESSFUL : PluginMessages.IPBAN_SUCCESSFUL, TextType.OK));
+        PluginStatics.broadcastChannel.send(PluginUtils.getBroadcastPunishMessage(src, nick, ActionType.MUTE, reason, null, ip != null));
+
+        src.sendMessage(getReplyText(ip == null ? PluginMessages.MUTE_SUCCESSFUL : PluginMessages.IPMUTE_SUCCESSFUL, TextType.OK));
 
         return CommandResult.success();
     }

@@ -17,7 +17,7 @@ public class MuteListener {
 
     @Listener(order = Order.FIRST)
     public void onMessage(MessageChannelEvent.Chat event, @First Player player) {
-        if (MuteCache.playerMuted(player)) {
+        if (MuteCache.isPlayerMuted(player)) {
             event.setCancelled(true);
             PluginUtils.sendMuteMessage(player);
         }
