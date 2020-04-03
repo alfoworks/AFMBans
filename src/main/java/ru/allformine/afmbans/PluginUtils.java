@@ -53,7 +53,7 @@ public class PluginUtils {
         Text.Builder text = Text.builder()
                 .append(Text.of(src.getName() + " ")).color(PluginStatics.MESSAGE_COLOR)
                 .append(Text.of(action + " "))
-                .append(Text.builder().append(Text.of("игрока ")).color(TextColors.RESET).build())
+                .append(Text.builder().append(Text.of(type == ActionType.MUTE || type == ActionType.UNMUTE ? "игроку " : " игрока ")).color(TextColors.RESET).build())
                 .append(Text.of(target)).color(PluginStatics.MESSAGE_COLOR);
 
         if (ip) {

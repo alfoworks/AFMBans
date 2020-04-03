@@ -42,6 +42,6 @@ public class AFMBans {
     public void started(GameStartedServerEvent event) {
         logger.trace("Starting mute info task...");
 
-        Task.builder().execute(new MuteInfoTask()).interval(2L, TimeUnit.MINUTES).async().submit(this);
+        Task.builder().execute(new MuteInfoTask()).interval(1L, TimeUnit.MINUTES).async().submit(this);
     }
 }

@@ -1,10 +1,12 @@
 package ru.allformine.afmbans.commands;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import ru.allformine.afmbans.ActionType;
+import ru.allformine.afmbans.MuteCache;
 import ru.allformine.afmbans.PluginMessages;
 import ru.allformine.afmbans.PluginUtils;
 import ru.allformine.afmbans.net.api.ban.BanAPI;
@@ -44,6 +46,8 @@ public class CommandUnmute extends Command {
         } else {
             src.sendMessage(getReplyText(PluginMessages.PLAYER_NOT_MUTED, TextType.OK));
         }
+
+        Sponge.getServer().getPlayer(nickname.get()).ifPresent(player -> MuteCache.setPlayerMuted(player, false));
 
         return CommandResult.success();
     }
