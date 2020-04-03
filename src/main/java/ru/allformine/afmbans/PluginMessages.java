@@ -15,7 +15,9 @@ public class PluginMessages {
     public static String IPMUTE_SUCCESSFUL = "Игроку был успешно выдан мут по IP.";
     public static String TEMPMUTE_SUCESSFUL = "Игроку был успешно выдан временный мут.";
     public static String IPTEMPMUTE_SUCCESSFUL = "Игроку был успешно выдан временный мут по IP.";
+    public static String UNMUTE_SUCCESSFUL = "С игрока был успешно снят мут.";
     public static String PLAYER_NOT_BANNED = "Игрок не забанен!";
+    public static String PLAYER_NOT_MUTED = "Игрок не в муте.";
     public static String PLAYER_UNKNOWN = "Игрок неизвестен.";
     public static String PLAYER_HAS_NO_ADDITIONAL_ACCOUNTS = "У игрока нет еще известных аккаунтов.";
     public static String NOT_ENOUGH_ARGUMENTS = "Недостаточно аргументов!";

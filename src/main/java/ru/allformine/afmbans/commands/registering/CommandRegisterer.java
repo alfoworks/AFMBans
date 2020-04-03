@@ -66,11 +66,44 @@ public class CommandRegisterer {
                         Parameters.OPTIONAL_REASON)
                 .build();
 
+        CommandSpec muteSpec = CommandSpec.builder()
+                .description(Text.of("Замутить игрока навсегда."))
+                .permission(PluginPermissions.COMMAND_MUTE)
+                .executor(new CommandMute())
+                .arguments(Parameters.IP_FLAG.buildWith(GenericArguments.seq(
+                        Parameters.PLAYER_AS_STRING,
+                        Parameters.OPTIONAL_REASON
+                )))
+                .build();
+
+        CommandSpec tempMuteSpec = CommandSpec.builder()
+                .description(Text.of("Временно замутить игрока."))
+                .permission(PluginPermissions.COMMAND_TEMP_MUTE)
+                .executor(new CommandTempMute())
+                .arguments(Parameters.IP_FLAG.buildWith(GenericArguments.seq(
+                        Parameters.PLAYER_AS_STRING,
+                        Parameters.TIME_COUNT,
+                        Parameters.TIME_UNIT,
+                        Parameters.OPTIONAL_REASON
+                )))
+                .build();
+
+        CommandSpec unmuteSpec = CommandSpec.builder()
+                .description(Text.of("Размутить игрока."))
+                .permission(PluginPermissions.COMMAND_UNMUTE)
+                .arguments(
+                        Parameters.PLAYER_AS_STRING)
+                .executor(new CommandUnmute())
+                .build();
+
         Sponge.getCommandManager().register(plugin, banSpec, "ban", "afmban");
         Sponge.getCommandManager().register(plugin, tempBanSpec, "tempban", "afmtempban");
         Sponge.getCommandManager().register(plugin, unbanSpec, "unban", "afmunban");
         Sponge.getCommandManager().register(plugin, kickSpec, "kick", "afmkick");
         Sponge.getCommandManager().register(plugin, dupeipSpec, "dupeip");
         Sponge.getCommandManager().register(plugin, debugSpec, "debug", "dbg", "d", "afmd");
+        Sponge.getCommandManager().register(plugin, muteSpec, "mute", "afmmute");
+        Sponge.getCommandManager().register(plugin, tempMuteSpec, "tempmute", "afmtempmute");
+        Sponge.getCommandManager().register(plugin, unmuteSpec, "unmute", "afmunmute");
     }
 }
