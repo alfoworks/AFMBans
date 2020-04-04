@@ -10,6 +10,8 @@ public class PluginPermissions {
     public static String COMMAND_MUTE = "afmbans.command.mute";
     public static String COMMAND_TEMP_MUTE = "afmbans.command.tempmute";
     public static String COMMAND_UNMUTE = "afmbans.command.unmute";
+    public static String COMMAND_WARN = "afmbans.command.warn";
+    public static String COMMAND_UNWARN = "afmbans.command.unwarn";
 
     public static String PLAYER_JOIN_NOTIFY = "afmbans.joinnotify";
 }

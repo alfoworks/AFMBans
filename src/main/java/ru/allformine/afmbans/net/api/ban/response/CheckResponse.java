@@ -35,7 +35,7 @@ public class CheckResponse {
                 }
             }
             this.count = response.has("count") ? response.get("count").getAsInt() : 0;
-            this.start = PluginStatics.dateFormat.parse(response.get("start").getAsString());
+            this.start = response.get("start") != null ? PluginStatics.dateFormat.parse(response.get("start").getAsString()) : null;
             if (response.has("end")) this.end = PluginStatics.dateFormat.parse(response.get("end").getAsString());
         }
     }

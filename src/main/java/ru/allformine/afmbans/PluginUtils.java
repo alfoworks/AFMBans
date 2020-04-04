@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class PluginUtils {
     public static Text getBroadcastPunishMessage(CommandSource src, String target, ActionType type, @Nullable String reason, @Nullable String pluralizedDuration, boolean ip) {
         String action = "";
+        List<ActionType> alterCaseTypes = Arrays.asList(ActionType.MUTE, ActionType.UNMUTE, ActionType.WARN, ActionType.UNWARN);
 
         switch (type) {
             case BAN:
@@ -53,7 +54,7 @@ public class PluginUtils {
         Text.Builder text = Text.builder()
                 .append(Text.of(src.getName() + " ")).color(PluginStatics.MESSAGE_COLOR)
                 .append(Text.of(action + " "))
-                .append(Text.builder().append(Text.of(type == ActionType.MUTE || type == ActionType.UNMUTE ? "игроку " : " игрока ")).color(TextColors.RESET).build())
+                .append(Text.builder().append(Text.of(alterCaseTypes.contains(type) ? "игроку " : " игрока ")).color(TextColors.RESET).build())
                 .append(Text.of(target)).color(PluginStatics.MESSAGE_COLOR);
 
         if (ip) {
@@ -88,16 +89,19 @@ public class PluginUtils {
 
         results.forEach((nickname, punished) -> {
             boolean isMuted;
+            int warnCount;
 
             /*
             В данном случае нет обращения к кешу, т.к. запрос не интервальный
              */
 
             BanAPI api = new BanAPI(nickname);
+
             try {
                 isMuted = api.check(PunishType.MUTE, null).punished;
+                warnCount = api.check(PunishType.WARN, null).count;
             } catch (Exception e) {
-                AFMBans.logger.error(String.format("Failed to check %s mute while generating DupeIP output!!!", nickname));
+                AFMBans.logger.error(String.format("Failed to check %s mute or warns while generating DupeIP output!!!", nickname));
                 e.printStackTrace();
                 return;
             }
@@ -110,10 +114,41 @@ public class PluginUtils {
                     .append(Text.builder().append(Text.of(" [ ")).build())
                     .append(Text.builder().append(Text.of(isMuted ? "В муте" : "Не в муте")).color(isMuted ? TextColors.RED : TextColors.GREEN).build())
                     .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
+                    .append(Text.builder().append(Text.of(" [ ")).build())
+                    .append(Text.builder().append(Text.of(String.format("Ворны: %s", warnCount))).color(warnCount > 0 ? TextColors.RED : TextColors.GREEN).build())
+                    .append(Text.builder().append(Text.of(" ]")).color(TextColors.RESET).build())
                     .build();
         });
 
         return builder.build();
+    }
+
+    public static void resetPlayerWarnsAndBan(String nick, CommandSource source) {
+        BanAPI api = new BanAPI(nick);
+
+        for (int i = 0; i < PluginStatics.MAX_WARNS; i++) {
+            try {
+                api.amnesty(source, PunishType.WARN);
+            } catch (IOException | ApiException e) {
+                AFMBans.logger.error(String.format("Error removing warn #%s from player %s!", i + 1, nick));
+                e.printStackTrace();
+            }
+        }
+
+        String reason = String.format("Превышено максимальное кол-во предупреждений: %s", PluginStatics.MAX_WARNS);
+        int days = 3;
+        Duration duration = Duration.ofDays(days);
+
+        try {
+            api.punish(source, PunishType.BAN, reason, duration, null);
+        } catch (IOException | ApiException e) {
+            AFMBans.logger.error(String.format("Error banning player %s for max warns.", nick));
+            e.printStackTrace();
+        }
+
+        Sponge.getServer().getPlayer(nick).ifPresent(player -> player.kick(PluginUtils.getPunishMessageForPlayer(PunishType.BAN, source.getName(), reason, new Date(System.currentTimeMillis() + duration.getSeconds() * 1000))));
+
+        PluginStatics.broadcastChannel.send(PluginUtils.getBroadcastPunishMessage(source, nick, ActionType.BAN, reason, PluginUtils.getDuratioPluralized("d", days), false));
     }
 
     public static Text getPunishMessageForPlayer(PunishType type, String source, String reason, @Nullable Date date) {
