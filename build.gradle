@@ -3,10 +3,10 @@ plugins {
 }
 
 group = 'ru.allformine.afmbans'
-version = '0.1-BETA'
+version = '1.0-RELEASE'
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:7.0.0'
+    compile 'org.spongepowered:spongeapi:7.2.0'
 }
 
 compileJava.options.encoding = "UTF-8"
