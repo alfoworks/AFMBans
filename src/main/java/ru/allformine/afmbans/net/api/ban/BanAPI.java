@@ -38,7 +38,7 @@ public class BanAPI {
         PluginUtils.debug("Sending JSON: \"" + json.toString() + "\" using method \"" + method + "\"");
         JsonRequest req = new JsonRequest(
                 new URL(
-                        String.format("http://allformine.ru/ban_api/?method=%s", method)
+                        String.format("https://api.alfo.ws/methods/mcbans.%s", method)
                 ),
                 json
         );
