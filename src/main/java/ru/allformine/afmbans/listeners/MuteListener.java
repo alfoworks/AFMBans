@@ -23,7 +23,7 @@ public class MuteListener {
 
     @Listener(order = Order.FIRST)
     public void onCommand(SendCommandEvent event, @First Player player) {
-        if (PluginStatics.prohibitedMuteCommands.contains(event.getCommand().toLowerCase())) {
+        if (PluginStatics.prohibitedMuteCommands.contains(event.getCommand().toLowerCase()) && MuteCache.isPlayerMuted(player)) {
             event.setCancelled(true);
             PluginUtils.sendMuteMessage(player);
         }

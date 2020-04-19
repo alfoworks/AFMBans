@@ -313,7 +313,7 @@ public class PluginUtils {
     }
 
     public static String join(Collection<String> collection, String symbol) {
-        return collection.stream().collect(Collectors.joining(symbol, symbol, symbol));
+        return collection.stream().collect(Collectors.joining(symbol, symbol, ""));
     }
 
     // ============================== //
