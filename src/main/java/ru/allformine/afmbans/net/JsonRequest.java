@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 
 public class JsonRequest {
     private String responseString;
-    private int responseCode;
+    private final int responseCode;
 
     public JsonRequest(URL url, JsonElement json) throws IOException {
         byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);

@@ -24,7 +24,7 @@ import java.util.Map;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public class BanAPI {
-    private String nickname;
+    private final String nickname;
 
     public BanAPI(String nickname) {
         this.nickname = nickname;
@@ -127,10 +127,17 @@ public class BanAPI {
     }
 
     public JsonObject amnesty(CommandSource commandSource, PunishType type) throws IOException, ApiException {
+        return amnesty(commandSource, type, false);
+    }
+
+    public JsonObject amnesty(CommandSource commandSource, PunishType type, boolean all) throws IOException, ApiException {
         JsonObject json = new JsonObject();
         json.addProperty("source", commandSource.getName());
         json.addProperty("target", this.nickname.toLowerCase());
         json.addProperty("type", "un" + type.name());
+        if(all && type == PunishType.WARN) {
+            json.addProperty("all", true);
+        }
         return makeRequest("amnesty", json);
     }
 
