@@ -90,6 +90,10 @@ public class BanAPI {
         return new HistoryResponse(resp);
     }
 
+    public CheckResponse check(PunishType type) throws IOException, ParseException, ApiException {
+        return check(type, null);
+    }
+
     public CheckResponse check(PunishType type, @Nullable InetAddress address) throws IOException, ParseException, ApiException {
         JsonObject json = new JsonObject();
         json.addProperty("nickname", this.nickname);
@@ -108,6 +112,39 @@ public class BanAPI {
         json.addProperty("type", "Warn");
         JsonObject res = makeRequest("check", json);
         return res.get("count").getAsInt();
+    }
+
+    public JsonObject punish(CommandSource commandSource, PunishType type) throws IOException, ApiException {
+        return punish(commandSource, type, null, null, null);
+    }
+
+    public JsonObject punish(CommandSource commandSource, PunishType type, String reason) throws IOException, ApiException {
+        return punish(commandSource, type, reason, null, null);
+    }
+
+    public JsonObject punish(CommandSource commandSource, PunishType type, Duration duration)
+            throws IOException, ApiException {
+        return punish(commandSource, type, null, duration, null);
+    }
+
+    public JsonObject punish(CommandSource commandSource, PunishType type, InetAddress address)
+            throws IOException, ApiException {
+        return punish(commandSource, type, null, null, address);
+    }
+
+    public JsonObject punish(CommandSource commandSource, PunishType type, String reason, Duration duration)
+            throws IOException, ApiException {
+        return punish(commandSource, type, reason, duration, null);
+    }
+
+    public JsonObject punish(CommandSource commandSource, PunishType type, Duration duration, InetAddress address)
+            throws IOException, ApiException {
+        return punish(commandSource, type, null, duration, address);
+    }
+
+    public JsonObject punish(CommandSource commandSource, PunishType type, String reason, InetAddress address)
+            throws IOException, ApiException {
+        return punish(commandSource, type, reason, null, address);
     }
 
     public JsonObject punish(CommandSource commandSource, PunishType type, @Nullable String reason,
